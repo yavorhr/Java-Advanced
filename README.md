@@ -4,32 +4,30 @@
 
 ## Course Description
 
-The [Programming Fundamentals](https://softuni.bg/trainings/2831/java-fundamentals-may-2020) is part of the Software University internal program for comprehensive training of software engineers. The course examines fundamental programming concepts and build on the knowledge gained in the Programming Basics course. More complex programming techniques and structures are being studied such as: **arrays**, **lists**, **objects** and **classes**, **dictionaries**, **strings** and **bitwise operations**. It also includes basic software technologies, concepts and tools, such as **HTML**, **CSS**, **HTTP**, **introduction to databases**, **web technologies**, working with **GIT** and **GitHub**.
+The [Java Advanced](https://softuni.bg/trainings/3009/java-advanced-september-2020) course aims to provide more knowledge in working with Java language. In the course you will learn to create **linear data structures**, **solve algorithmic problems** (problem solving skills), work with **streams, files and directories**, create **template classes**. Attention is paid to the paradigm of **functional programming**, as well as the main tool relying on it - **Stream API** for processing data streams. The development environment that will be used primary is IntelliJ Idea.
 
 ## Course content
-
-- Basic syntax, conditional statement and loops
-- Data types and variables
-- Basic **HTML** & **CSS**
-- **Arrays**, **Lists** and **Associative arrays**
-- **Methods**
-- **Objects** and **Classes**
-- HTTP basics
-- **Regular expressions**
-- **Text processing**
-- Basic bitwise operations
-- Database basics
-- Problem solving
+- Stacks and Queues 
+- What is algorithmic Complexity ?
+- Multidimensional Array - initializing, reading and accessing elements
+- Sets (HashSet, TreeSet, LinkedHashSet)
+- Maps (Hashmap, TreeMap, LinkedHashMap)
+- Streams, Files and Directories 
+- Functional Programming 
+- Defining classes - fields, methods, constructors, .this, static members
+- Generics - generic classes and interfaces ; generic methods ; type erasure and type parameter bounds
+- Iterators and Comparators 
 
 ## Acquired skills
 
-- Analysis of complex problems and reduction to computer-executable steps
-- Understanding the relationship between different IT concepts
-- Handling with standard functionality in Java 
-- Working with linear data structures
-- Basics of web development
-- Basic skills for working with HTML and CSS
+- Creating linear data structures
+- Fundamentals of functional programming
+- Creating template classes
+- Application of basic algorithms
+- Work with data streams, files and directories
+- Working with multidimensional and associative data structures
 
-![Java Fundamentals - May 2020 - Certificate](https://user-images.githubusercontent.com/76119513/137166172-b9fff415-64a9-4045-b700-b5bc63330728.jpeg)
+
+![Java Advanced - September 2020 - Certificate](https://user-images.githubusercontent.com/76119513/137166172-b9fff415-64a9-4045-b700-b5bc63330728.jpeg)
 
 

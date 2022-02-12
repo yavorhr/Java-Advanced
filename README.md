@@ -27,7 +27,8 @@ The [Java Advanced](https://softuni.bg/trainings/3009/java-advanced-september-20
 - Work with data streams, files and directories
 - Working with multidimensional and associative data structures
 
+![Java Advanced - September 2020 - Certificate](https://user-images.githubusercontent.com/76119513/153706658-68bc7369-230d-424a-9e11-bda9de81453f.jpeg)
 
-![Java Advanced - September 2020 - Certificate](https://user-images.githubusercontent.com/76119513/137166172-b9fff415-64a9-4045-b700-b5bc63330728.jpeg)
+
 
 

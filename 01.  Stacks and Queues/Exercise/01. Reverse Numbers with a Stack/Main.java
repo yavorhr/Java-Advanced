@@ -6,12 +6,23 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        ArrayDeque<String> stackNumbers = new ArrayDeque<>();
+        String[] numbers = scanner.nextLine().split(" ");
 
-        Arrays.stream(scanner.nextLine().split("\\s+")).forEach(stackNumbers::push);
+        ArrayDeque<String> stack = addNumbersToStack(numbers);
 
-        while (!stackNumbers.isEmpty()) {
-            System.out.print(stackNumbers.pop() + " ");
+        printStack(stack);
+    }
+
+    private static void printStack(ArrayDeque<String> stack) {
+        while (!stack.isEmpty()) {
+            System.out.printf("%s ", stack.pop());
         }
+    }
+
+    private static ArrayDeque<String> addNumbersToStack(String[] numbers) {
+        ArrayDeque<String> stack = new ArrayDeque<>();
+
+        Arrays.stream(numbers).forEach(stack::push);
+        return stack;
     }
 }

@@ -12,24 +12,32 @@ public class Main {
 
         int cycles = 1;
         while (children.size() > 1) {
+
             for (int i = 1; i < n; i++) {
-                String currentChild = children.poll();
-                children.offer(currentChild);
+                passingPotato(children);
             }
 
             String child = children.peek();
+
             if (!isPrime(cycles)) {
-                System.out.println("Removed " + child);
+                printResult(child, "Removed ");
                 children.poll();
             } else {
-                System.out.println("Prime " + child);
-
+                printResult(child, "Prime ");
             }
-
             cycles++;
         }
         String lastChild = children.poll();
-        System.out.println("Last is " + lastChild);
+        printResult(lastChild, "Last is ");
+    }
+
+    private static void passingPotato(ArrayDeque<String> children) {
+        String currentChild = children.poll();
+        children.offer(currentChild);
+    }
+
+    private static void printResult(String child, String s) {
+        System.out.println(s + child);
     }
 
     private static boolean isPrime(int number) {

@@ -1,53 +1,58 @@
 import java.util.ArrayDeque;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        String[] firstLineData = scanner.nextLine().split("\\s+"); //n, s, x
-        String[] secondLineData = scanner.nextLine().split("\\s+");
+        int[] argsInputArr = addInputToArray(scanner);
+        int[] intsArray = addInputToArray(scanner);
 
-        int n = Integer.parseInt(firstLineData[0]);
-        int s = Integer.parseInt(firstLineData[1]);
-        int x = Integer.parseInt(firstLineData[2]);
+        ArrayDeque<Integer> stack = new ArrayDeque<>();
 
+        int n = argsInputArr[0];
+        int s = argsInputArr[1];
+        int x = argsInputArr[2];
 
-        ArrayDeque<Integer> stackNumbers = new ArrayDeque<>();
-        // n - > add (push)
-        for (int i = 0; i < n; i++) {
-            stackNumbers.push(Integer.parseInt(secondLineData[i]));
-        }
+        addIntegersToStack(n, intsArray, stack);
+        popNumbersFromStack(s, stack);
+        printResult(stack, x);
+    }
 
-        // s -> remove (pop)
-        for (int i = 0; i < s; i++) {
-            stackNumbers.pop();
-        }
-
-        //always check if stack isEmpty
-        if (stackNumbers.isEmpty()) {
-            System.out.println(0);
+    private static void printResult(ArrayDeque<Integer> stack, int x) {
+        if (stack.contains(x)) {
+            System.out.println("true");
         } else {
-            if (stackNumbers.contains(x)) {
-                System.out.println("true");
-            } else {
-                //find min element using API -> System.out.println(stackNumbers.stream().mapToInt(e->e).min().getAsInt());
-                //find min element using Collections -> Collections.min(stackNumbers);
-                //algorithm for minElement
-                System.out.println(getMinElement(stackNumbers));
-            }
+            printMinValue(stack);
         }
     }
 
-    private static int getMinElement(ArrayDeque<Integer> stackNumbers) {
-        int min = Integer.MAX_VALUE;
-        for (int number : stackNumbers) {
-            if (number < min) {
-                min = number;
-            }
+    private static void printMinValue(ArrayDeque<Integer> stack) {
+        int minNumber = stack
+                .stream()
+                .mapToInt(Integer::valueOf)
+                .min()
+                .orElse(0);
+        System.out.println(minNumber);
+    }
+
+    private static int[] addInputToArray(Scanner scanner) {
+        return Arrays.stream(scanner.nextLine()
+                .split(" "))
+                .mapToInt(Integer::parseInt)
+                .toArray();
+    }
+
+    private static void addIntegersToStack(int n, int[] arr, ArrayDeque<Integer> stack) {
+        for (int i = 0; i < n; i++) {
+            stack.push(arr[i]);
         }
-        return min;
+    }
+
+    private static void popNumbersFromStack(int s, ArrayDeque<Integer> stack) {
+        for (int i = 0; i < s; i++) {
+            stack.pop();
+        }
     }
 }
-
-

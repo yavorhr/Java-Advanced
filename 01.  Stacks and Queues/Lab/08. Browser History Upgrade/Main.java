@@ -10,11 +10,12 @@ public class Main {
         ArrayDeque<String> forwardHistory = new ArrayDeque<>();
 
         String currentUrl = "";
+
         String navigation = scanner.nextLine();
         while (!navigation.equals("Home")) {
             if (navigation.equals("back")) {
                 if (history.isEmpty()) {
-                    System.out.println("no previous URLs");
+                    printResult("no previous URLs");
                     navigation = scanner.nextLine();
                     continue;
                 } else {
@@ -26,11 +27,10 @@ public class Main {
                     history.push(currentUrl);
                     currentUrl = forwardHistory.pop();
                 } else {
-                    System.out.println("no next URLs");
+                    printResult("no next URLs");
                     navigation = scanner.nextLine();
                     continue;
                 }
-
             } else {
                 if (!currentUrl.isEmpty()) {
                     history.push(currentUrl);
@@ -40,8 +40,12 @@ public class Main {
                 }
                 currentUrl = navigation;
             }
-            System.out.println(currentUrl);
+            printResult(currentUrl);
             navigation = scanner.nextLine();
         }
+    }
+
+    private static void printResult(String s) {
+        System.out.println(s);
     }
 }

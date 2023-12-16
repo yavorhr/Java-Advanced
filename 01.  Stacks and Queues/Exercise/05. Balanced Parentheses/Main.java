@@ -4,47 +4,42 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        String input = scanner.nextLine();
 
-        boolean areBalanced = true;
+        String parentheses = scanner.nextLine();
         ArrayDeque<Character> openBrackets = new ArrayDeque<>();
 
-        for (int i = 0; i < input.length(); i++) {
-            char currentBracket = input.charAt(i);
-            if (currentBracket == '{' || currentBracket == '[' || currentBracket == '(') {
+        boolean areBalanced = true;
+
+        for (int i = 0; i < parentheses.length(); i++) {
+            char currentBracket = parentheses.charAt(i);
+
+            if (currentBracket == '(' || currentBracket == '[' || currentBracket == '{') {
                 openBrackets.push(currentBracket);
-            }
-            else if (currentBracket == '}' || currentBracket == ']' || currentBracket == ')') {
-                if (openBrackets.isEmpty()){
-                    areBalanced=false;
+            } else if (currentBracket == ')' || currentBracket == ']' || currentBracket == '}') {
+                if (openBrackets.isEmpty()) {
+                    areBalanced = false;
                     break;
                 }
-                char lastOpenBracket = openBrackets.pop();
-                if (currentBracket == ')' && lastOpenBracket != '(') {
+
+                char openingBracket = openBrackets.pop();
+
+                if (openingBracket == '(' && currentBracket != ')') {
                     areBalanced = false;
-                } else if (currentBracket == ']' && lastOpenBracket != '[') {
+                } else if (openingBracket == '{' && currentBracket != '}') {
                     areBalanced = false;
-                } else if (currentBracket == '}' && lastOpenBracket != '{') {
+                } else if (openingBracket == '[' && currentBracket != ']') {
                     areBalanced = false;
                 }
             }
-
         }
+        printResult(areBalanced);
+    }
 
+    private static void printResult(boolean areBalanced) {
         if (areBalanced) {
             System.out.println("YES");
         } else {
             System.out.println("NO");
         }
-
     }
 }
-
-
-
-
-
-
-
-
-

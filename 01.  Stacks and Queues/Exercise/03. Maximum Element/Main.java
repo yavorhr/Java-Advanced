@@ -5,45 +5,48 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
+        int n = Integer.parseInt(scanner.nextLine());
         ArrayDeque<Integer> stack = new ArrayDeque<>();
 
-        int count = Integer.parseInt(scanner.nextLine());
-        for (int i = 0; i < count; i++) {
-            String[] input = scanner.nextLine().split("\\s+");
-            String command = input[0];
+        while (n > 0) {
+            String[] tokens = scanner.nextLine().split(" ");
+            String command = tokens[0];
+
             switch (command) {
-                case "1":
-                    int element = Integer.parseInt(input[1]);
-                    stack.push(element);
-                    break;
-                case "2":
-                    if (!stack.isEmpty()) {
-                        stack.pop();
-                    } else {
-                        System.out.println(0);
-                    }
-                    break;
-                case "3":
-                    // using Collections ->  Collections.max(stack)
-                    // using stream API -> System.out.println(stack.stream().mapToInt(Integer::intValue).max().orElse(0));
-                    System.out.println(getMaximum(stack));
-                    break;
+                case "1" -> {
+                    int integer = Integer.parseInt(tokens[1]);
+                    stack.push(integer);
+                }
+                case "2" -> stack.pop();
+                case "3" -> {
+                    int maxElement = getMaxValue(stack);
+                    printMaxElement(maxElement);
+                }
             }
+            n--;
         }
     }
 
-    private static int getMaximum(ArrayDeque<Integer> stack) {
-        int max = Integer.MIN_VALUE;
+    private static void printMaxElement(int maxElement) {
+        System.out.println(maxElement);
+    }
 
-        for (Integer integer : stack) {
-            if (integer > max) {
-                max = integer;
+    private static int getMaxValue(ArrayDeque<Integer> stack) {
+
+//     Using Stream API
+//       int maxElement = stack
+//               .stream()
+//               .mapToInt(Integer::valueOf)
+//               .max()
+//               .orElse(0);
+
+        int maxValue = Integer.MIN_VALUE;
+
+        for (Integer number : stack) {
+            if (number > maxValue) {
+                maxValue = number;
             }
         }
-        return max;
+        return maxValue;
     }
 }
-
-
-
-

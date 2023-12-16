@@ -5,54 +5,54 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        String[] firstLineData = scanner.nextLine().split("\\s+"); //n, s, x
-        String[] secondLineData = scanner.nextLine().split("\\s+");
+        String[] input = scanner.nextLine().split(" ");
+        String[] elements = scanner.nextLine().split(" ");
 
-        int n = Integer.parseInt(firstLineData[0]);
-        int s = Integer.parseInt(firstLineData[1]);
-        int x = Integer.parseInt(firstLineData[2]);
+        ArrayDeque<Integer> queue = new ArrayDeque<>();
 
+        int count = Integer.parseInt(input[1]);
+        int intInput = Integer.parseInt(input[2]);
 
-        ArrayDeque<Integer> queueNumbers = new ArrayDeque<>();
-        // n - > add (push)
-        for (int i = 0; i < n; i++) {
-            queueNumbers.offer(Integer.parseInt(secondLineData[i]));
+        addElementToQueue(elements, queue);
+
+        if (checkSize(queue, count)) {
+            removeElement(queue, count);
         }
 
-        // s -> remove (pop)
-        for (int i = 0; i < s; i++) {
-            queueNumbers.poll();
-        }
+        printIfIsPresent(queue, intInput);
+    }
 
-        //always check if stack isEmpty
-        if (queueNumbers.isEmpty()) {
-            System.out.println(0);
+    private static void printIfIsPresent(ArrayDeque<Integer> queue, int x) {
+        if (queue.contains(x)) {
+            System.out.println("true");
         } else {
-            if (queueNumbers.contains(x)) {
-                System.out.println("true");
-            } else {
-                //find min element using API -> System.out.println(queueNumbers.stream().mapToInt(e->e).min().getAsInt());
-                //find min element using Collections -> Collections.min(queueNumbers);
-                //algorithm for minElement
-                System.out.println(getMinElement(queueNumbers));
-
-            }
+            printMinValue(queue);
         }
     }
 
-    private static int getMinElement(ArrayDeque<Integer> stackNumbers) {
-        int min = Integer.MAX_VALUE;
-        for (int number : stackNumbers) {
-            if (number < min) {
-                min = number;
-            }
+    private static void printMinValue(ArrayDeque<Integer> queue) {
+        int minValue = getMinElement(queue);
+        System.out.println(minValue);
+    }
+
+    private static int getMinElement(ArrayDeque<Integer> queue) {
+        return queue.stream().mapToInt(i -> i).min().orElse(0);
+    }
+
+    private static void removeElement(ArrayDeque<Integer> queue, int count) {
+        for (int i = 0; i < count; i++) {
+            queue.poll();
         }
-        return min;
+    }
+
+    private static boolean checkSize(ArrayDeque<Integer> queue, int s) {
+        return s < queue.size();
+    }
+
+    private static void addElementToQueue(String[] elements, ArrayDeque<Integer> queue) {
+        for (String e : elements) {
+            int parseToInt = Integer.parseInt(e);
+            queue.offer(parseToInt);
+        }
     }
 }
-
-
-
-
-
-

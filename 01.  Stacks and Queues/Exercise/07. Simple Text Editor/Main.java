@@ -6,53 +6,54 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
 
         int n = Integer.parseInt(scanner.nextLine());
+
         StringBuilder text = new StringBuilder();
+        ArrayDeque<StringBuilder> stack = new ArrayDeque<>();
 
-        ArrayDeque<StringBuilder> stackOperations = new ArrayDeque<>();
+        while (n > 0) {
+            String[] tokens = scanner.nextLine().split(" ");
+            String command = tokens[0];
 
-        for (int i = 0; i < n; i++) {
-            String input = scanner.nextLine();
-            String[] inputSplit = input.split("\\s+");
-            String command = inputSplit[0];
             switch (command) {
-                case "1":
-                    String string = inputSplit[1];
-                    text.append(string);
-                    stackOperations.push(new StringBuilder(text));
-                    break;
-                case "2":
-                    int eraseCount = Integer.parseInt(inputSplit[1]);
-                    int startIndex = text.length() - eraseCount;
-                    int endIndex = startIndex + eraseCount;
-                    text = text.delete(startIndex, endIndex);
-                    stackOperations.push(new StringBuilder(text));
-                    break;
-                case "3":
-                    int index = Integer.parseInt(inputSplit[1]);
-                    System.out.println(text.charAt(index - 1));
-                    break;
-                case "4":
-                    if (stackOperations.size() > 1) {
-                        stackOperations.pop();
-                        text = stackOperations.peek();
-                    } else if (stackOperations.size() == 1) {
+                case "1" -> {
+                    String substring = tokens[1];
+                    text.append(substring);
+                    stack.push(new StringBuilder(text));
+                }
+                case "2" -> {
+                    int eraseCount = Integer.parseInt(tokens[1]);
+
+                    if (isInBounds(text, eraseCount)) {
+                        removeElements(text, eraseCount);
+                        stack.push(new StringBuilder(text));
+                    }
+                }
+                case "3" -> {
+                    int index = Integer.parseInt(tokens[1]);
+                    if (isInBounds(text, index)) {
+                        System.out.println(text.charAt(index - 1));
+                    }
+                }
+                case "4" -> {
+                    if (stack.size() > 1) {
+                        stack.pop();
+                        text = stack.peek();
+                    } else if (stack.size() == 1) {
                         text = new StringBuilder();
                     }
-                    break;
+                }
             }
+            n--;
         }
-        System.out.println();
+    }
+
+    private static boolean isInBounds(StringBuilder text, int eraseCount) {
+        return eraseCount >= 0 && eraseCount <= text.toString().length();
+    }
+
+    private static void removeElements(StringBuilder text, int eraseCount) {
+        int startIndex = text.length() - eraseCount;
+        int endIndex = startIndex + eraseCount;
+        text.delete(startIndex, endIndex);
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-

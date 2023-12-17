@@ -5,24 +5,25 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        int[][] firstMatrix = readMatrix(scanner);
-        int[][] secondMatrix = readMatrix(scanner);
+        int[][] firstMatrix = readMatrixUsingStream(scanner);
+        int[][] secondMatrix = readMatrixUsingLoop(scanner);
 
-        System.out.println(isEqual(firstMatrix, secondMatrix) ? "equal" : "not equal");
+        System.out.println(compareMatrices(firstMatrix, secondMatrix) ? "equal" : "not equal");
     }
 
-    private static boolean isEqual(int[][] firstMatrix, int[][] secondMatrix) {
+    private static boolean compareMatrices(int[][] firstMatrix, int[][] secondMatrix) {
         if (firstMatrix.length != secondMatrix.length) {
             return false;
         }
-        for (int row = 0; row < firstMatrix.length; row++) {
-            int[] firstArr = firstMatrix[row];
-            int[] secArr = secondMatrix[row];
-            if (firstArr.length != secArr.length) {
+
+        for (int i = 0; i < firstMatrix.length; i++) {
+            int[] firstArr = firstMatrix[i];
+            int[] secondArr = secondMatrix[i];
+            if (firstArr.length != secondArr.length) {
                 return false;
             }
-            for (int col = 0; col < firstArr.length; col++) {
-                if (firstArr[col] != secArr[col]) {
+            for (int j = 0; j < firstArr.length; j++) {
+                if (firstArr[j] != secondArr[j]) {
                     return false;
                 }
             }
@@ -30,23 +31,40 @@ public class Main {
         return true;
     }
 
-    private static int[][] readMatrix(Scanner scanner) {
-        int[] dimensions = Arrays.stream(scanner.nextLine().split("\\s+"))
-                .mapToInt(Integer::parseInt)
-                .toArray();
-
+    private static int[][] readMatrixUsingStream(Scanner scanner) {
+        int[] dimensions = readArrayFromConsole(scanner);
         int rows = dimensions[0];
-        int columns = dimensions[1];
 
-        int matrix[][] = new int[rows][columns];
+        int[][] matrix = new int[rows][];
 
-        for (int row = 0; row < matrix.length; row++) {
-            int[] arr = Arrays.stream(scanner.nextLine().split("\\s+"))
-                    .mapToInt(Integer::parseInt)
-                    .toArray();
-            matrix[row] = arr;
+        for (int i = 0; i < rows; i++) {
+            int[] arr = readArrayFromConsole(scanner);
+            matrix[i] = arr;
+        }
+
+        return matrix;
+    }
+
+    private static int[][] readMatrixUsingLoop(Scanner scanner) {
+        int[] dimensions = readArrayFromConsole(scanner);
+        int rows = dimensions[0];
+        int cols = dimensions[1];
+
+        int[][] matrix = new int[rows][cols];
+
+        for (int row = 0; row < rows; row++) {
+            int[] arr = readArrayFromConsole(scanner);
+            for (int col = 0; col < cols; col++) {
+                matrix[row][col] = arr[col];
+            }
         }
         return matrix;
     }
-}
 
+    private static int[] readArrayFromConsole(Scanner scanner) {
+        return Arrays.stream(scanner.nextLine()
+                .split("\\s+"))
+                .mapToInt(Integer::parseInt)
+                .toArray();
+    }
+}

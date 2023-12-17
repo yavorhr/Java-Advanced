@@ -1,56 +1,44 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
-
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        int[] tokens = readArrayFromConsole(scanner);
+        int[][] matrix = readMatrix(scanner);
+        List<int[]> listWithArrays = new ArrayList<>();
 
-        int rows = tokens[0];
-        int cols = tokens[1];
+        fillMatrix(matrix, scanner);
 
-        int[][] matrix = fillMatrix(rows, cols, scanner);
-        int sum = getSum(matrix);
-
-        printResult(rows, cols, sum);
-    }
-
-    private static int[] readArrayFromConsole(Scanner scanner) {
-        return Arrays.stream(scanner.nextLine().split(", ")).mapToInt(Integer::parseInt).toArray();
-    }
-
-    private static int[][] fillMatrix(int rows, int cols, Scanner scanner) {
-        int[][] matrix = new int[rows][cols];
+        int number = Integer.parseInt(scanner.nextLine());
 
         for (int row = 0; row < matrix.length; row++) {
-            int[] arr = readArrayFromConsole(scanner);
-            for (int col = 0; col < arr.length; col++) {
-                matrix[row][col] = arr[col];
+            int[] currentArray = matrix[row];
+            for (int col = 0; col < currentArray.length; col++) {
+                int currentNumber = matrix[row][col];
+
+                if (currentNumber == number) {
+                    listWithArrays.add(new int[]{row, col});
+                }
             }
         }
-        return matrix;
+
+        if (listWithArrays.isEmpty()) {
+            System.out.println("not found");
+        } else {
+            listWithArrays.forEach(arr -> System.out.println(arr[0] + " " + arr[1]));
+        }
     }
 
-    private static int getSum(int[][] matrix) {
-        int sum = 0;
+    private static int[][] readMatrix(Scanner scanner) {
+        int rows = scanner.nextInt();
+        int cols = scanner.nextInt();
+        scanner.nextLine();
 
+        return new int[rows][cols];
+    }
+
+    private static void fillMatrix(int[][] matrix, Scanner scanner) {
         for (int row = 0; row < matrix.length; row++) {
-            int[] arr = matrix[row];
-            for (int col = 0; col < arr.length; col++) {
-                int currentNum = matrix[row][col];
-                sum += currentNum;
-            }
+            int[] arr = Arrays.stream(scanner.nextLine().split(" ")).mapToInt(Integer::valueOf).toArray();
+            matrix[row] = arr;
         }
-        return sum;
-    }
-
-    private static void printResult(int rows, int cols, int sum) {
-        System.out.println(rows);
-        System.out.println(cols);
-        System.out.println(sum);
     }
 }
-

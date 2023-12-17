@@ -7,44 +7,50 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        int[][] matrix = readMatrix(scanner);
-        List<int[]> listWithArrays = new ArrayList<>();
+        int[] tokens = readArrayFromConsole(scanner);
 
-        fillMatrix(matrix, scanner);
+        int rows = tokens[0];
+        int cols = tokens[1];
 
-        int number = Integer.parseInt(scanner.nextLine());
+        int[][] matrix = fillMatrix(rows, cols, scanner);
+        int sum = getSum(matrix);
+
+        printResult(rows, cols, sum);
+    }
+
+    private static int[] readArrayFromConsole(Scanner scanner) {
+        return Arrays.stream(scanner.nextLine().split(", ")).mapToInt(Integer::parseInt).toArray();
+    }
+
+    private static int[][] fillMatrix(int rows, int cols, Scanner scanner) {
+        int[][] matrix = new int[rows][cols];
 
         for (int row = 0; row < matrix.length; row++) {
-            int[] currentArray = matrix[row];
-            for (int col = 0; col < currentArray.length; col++) {
-                int currentNumber = matrix[row][col];
-
-                if (currentNumber == number) {
-                    listWithArrays.add(new int[]{row, col});
-                }
+            int[] arr = readArrayFromConsole(scanner);
+            for (int col = 0; col < arr.length; col++) {
+                matrix[row][col] = arr[col];
             }
         }
-
-        if (listWithArrays.isEmpty()) {
-            System.out.println("not found");
-        } else {
-            listWithArrays.forEach(arr -> System.out.println(arr[0] + " " + arr[1]));
-        }
+        return matrix;
     }
 
-    private static int[][] readMatrix(Scanner scanner) {
-        int rows = scanner.nextInt();
-        int cols = scanner.nextInt();
-        scanner.nextLine();
+    private static int getSum(int[][] matrix) {
+        int sum = 0;
 
-        return new int[rows][cols];
-    }
-
-    private static void fillMatrix(int[][] matrix, Scanner scanner) {
         for (int row = 0; row < matrix.length; row++) {
-            int[] arr = Arrays.stream(scanner.nextLine().split(" ")).mapToInt(Integer::valueOf).toArray();
-            matrix[row] = arr;
+            int[] arr = matrix[row];
+            for (int col = 0; col < arr.length; col++) {
+                int currentNum = matrix[row][col];
+                sum += currentNum;
+            }
         }
+        return sum;
+    }
+
+    private static void printResult(int rows, int cols, int sum) {
+        System.out.println(rows);
+        System.out.println(cols);
+        System.out.println(sum);
     }
 }
 

@@ -19,11 +19,13 @@ public class Main {
         for (int i = 0; i < firstMatrix.length; i++) {
             int[] firstArr = firstMatrix[i];
             int[] secondArr = secondMatrix[i];
+
             if (firstArr.length != secondArr.length) {
                 return false;
             }
-            for (int j = 0; j < firstArr.length; j++) {
-                if (firstArr[j] != secondArr[j]) {
+
+            for (int col = 0; col < firstArr.length; col++) {
+                if (firstArr[col] != secondArr[col]) {
                     return false;
                 }
             }

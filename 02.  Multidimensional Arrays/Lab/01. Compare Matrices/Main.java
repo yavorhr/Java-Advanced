@@ -1,46 +1,72 @@
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Main {
-    public static long[] memoryForFib;
-
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        int rows = Integer.parseInt(scanner.nextLine());
-        int columns = Integer.parseInt(scanner.nextLine());
+        int[][] firstMatrix = readMatrixUsingStream(scanner);
+        int[][] secondMatrix = readMatrixUsingLoop(scanner);
 
-        char[][] firstMatrix = readMatrix(scanner, rows, columns);
-        char[][] secondMatrix = readMatrix(scanner, rows, columns);
-
-        char[][] outputMatrix = new char[rows][columns];
-
-        for (int row = 0; row < rows; row++) {
-            for (int col = 0; col < columns; col++) {
-                outputMatrix[row][col] =
-                        firstMatrix[row][col] == secondMatrix[row][col]
-                                ? firstMatrix[row][col]
-                                : '*';
-            }
-        }
-
-        for (int row = 0; row < rows; row++) {
-            for (int col = 0; col < columns; col++) {
-                char symbol = outputMatrix[row][col];
-                System.out.print(symbol + " ");
-            }
-            System.out.println();
-        }
+        System.out.println(compareMatrices(firstMatrix, secondMatrix) ? "equal" : "not equal");
     }
 
-    public static char[][] readMatrix(Scanner scanner, int rows, int cols) {
-        char[][] matrix = new char[rows][cols];
+    private static boolean compareMatrices(int[][] firstMatrix, int[][] secondMatrix) {
+        if (firstMatrix.length != secondMatrix.length) {
+            return false;
+        }
+
+        for (int i = 0; i < firstMatrix.length; i++) {
+            int[] firstArr = firstMatrix[i];
+            int[] secondArr = secondMatrix[i];
+
+            if (firstArr.length != secondArr.length) {
+                return false;
+            }
+
+            for (int col = 0; col < firstArr.length; col++) {
+                if (firstArr[col] != secondArr[col]) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private static int[][] readMatrixUsingStream(Scanner scanner) {
+        int[] dimensions = readArrayFromConsole(scanner);
+        int rows = dimensions[0];
+
+        int[][] matrix = new int[rows][];
+
+        for (int i = 0; i < rows; i++) {
+            int[] arr = readArrayFromConsole(scanner);
+            matrix[i] = arr;
+        }
+
+        return matrix;
+    }
+
+    private static int[][] readMatrixUsingLoop(Scanner scanner) {
+        int[] dimensions = readArrayFromConsole(scanner);
+        int rows = dimensions[0];
+        int cols = dimensions[1];
+
+        int[][] matrix = new int[rows][cols];
 
         for (int row = 0; row < rows; row++) {
-            String[] symbols = scanner.nextLine().split("\\s+");
+            int[] arr = readArrayFromConsole(scanner);
             for (int col = 0; col < cols; col++) {
-                matrix[row][col] = symbols[col].charAt(0);
+                matrix[row][col] = arr[col];
             }
         }
         return matrix;
+    }
+
+    private static int[] readArrayFromConsole(Scanner scanner) {
+        return Arrays.stream(scanner.nextLine()
+                .split("\\s+"))
+                .mapToInt(Integer::parseInt)
+                .toArray();
     }
 }

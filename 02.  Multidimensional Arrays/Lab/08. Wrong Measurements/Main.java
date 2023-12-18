@@ -7,68 +7,82 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        int rows = Integer.parseInt(scanner.nextLine());
-        int[][] matrix = new int[rows][];
+        int size = Integer.parseInt(scanner.nextLine());
+        int[][] matrix = fillMatrix(scanner, size);
+        int[] wrongValueCoordinates = readMatrix(scanner);
 
-        for (int row = 0; row < rows; row++) {
-            matrix[row] = readArray(scanner, "\\s+");
-        }
+        int wrongValue = matrix[wrongValueCoordinates[0]][wrongValueCoordinates[1]];
 
-        int[] validIndexes = readArray(scanner, "\\s+");
-
-        List<int[]> indexes = new ArrayList<>();
         List<Integer> correctValues = new ArrayList<>();
+        List<int[]> indexes = new ArrayList<>();
 
-        int wrongValue = matrix[validIndexes[0]][validIndexes[1]];
         for (int row = 0; row < matrix.length; row++) {
-            for (int col = 0; col < matrix[row].length; col++) {
+            int[] arr = matrix[row];
+            for (int col = 0; col < arr.length; col++) {
                 if (matrix[row][col] == wrongValue) {
                     indexes.add(new int[]{row, col});
-                    correctValues.add(getCorrectValue(matrix, row, col));
+                    int newValue = getCorrectValues(matrix, row, col);
+                    correctValues.add(newValue);
                 }
             }
         }
 
-        for (int i = 0; i < indexes.size(); i++) {
-            int[] rowAndCol = indexes.get(i);
-            matrix[rowAndCol[0]][rowAndCol[1]] = correctValues.get(i);
-        }
+        changeWrongValuesInMatrix(matrix,correctValues,indexes);
+
+        printMatrix(matrix);
+    }
+
+    private static int[] readMatrix(Scanner scanner) {
+        return Arrays.stream(scanner.nextLine().split(" ")).mapToInt(Integer::parseInt).toArray();
+    }
+
+    private static void printMatrix(int[][] matrix) {
         for (int row = 0; row < matrix.length; row++) {
             for (int col = 0; col < matrix[row].length; col++) {
-                System.out.print (matrix[row][col] + " ");
+                System.out.print(matrix[row][col] + " ");
             }
             System.out.println();
         }
     }
 
-    private static int getCorrectValue(int[][] matrix, int row, int col) {
-        int sum = 0;
-
-        int wrongValue = matrix[row][col];
-
-        if (isInBound(matrix, row - 1, col) && wrongValue != matrix[row - 1][col]) {
-            sum += matrix[row - 1][col];
+    private static void changeWrongValuesInMatrix(int[][] matrix, List<Integer> correctValues, List<int[]> indexes) {
+        for (int i = 0; i < indexes.size(); i++) {
+            int[] rowAndColl = indexes.get(i);
+            matrix[rowAndColl[0]][rowAndColl[1]] = correctValues.get(i);
         }
-        if (isInBound(matrix, row + 1, col) && wrongValue != matrix[row + 1][col]) {
+    }
+
+    private static int getCorrectValues(int[][] matrix, int row, int col) {
+        int sum = 0;
+        int wrongValue = matrix[row][col];
+        if (isInBounds(matrix, row + 1, col) && matrix[row + 1][col] != wrongValue) {
             sum += matrix[row + 1][col];
         }
-        if (isInBound(matrix, row, col - 1) && wrongValue != matrix[row][col - 1]) {
-            sum += matrix[row][col - 1];
+        if (isInBounds(matrix, row - 1, col) && matrix[row - 1][col] != wrongValue) {
+            sum += matrix[row - 1][col];
         }
-        if (isInBound(matrix, row, col + 1) && wrongValue != matrix[row][col + 1]) {
+        if (isInBounds(matrix, row, col + 1) && matrix[row][col + 1] != wrongValue) {
             sum += matrix[row][col + 1];
+        }
+        if (isInBounds(matrix, row, col - 1) && matrix[row][col - 1] != wrongValue) {
+            sum += matrix[row][col - 1];
         }
         return sum;
     }
 
-    private static boolean isInBound(int[][] matrix, int row, int col) {
+    private static boolean isInBounds(int[][] matrix, int row, int col) {
         return row >= 0 && row < matrix.length && col >= 0 && col < matrix[row].length;
     }
 
+    private static int[][] fillMatrix(Scanner scanner, int size) {
+        int[][] matrix = new int[size][];
 
-    public static int[] readArray(Scanner scanner, String separator) {
-        return Arrays.stream(scanner.nextLine().split(separator))
-                .mapToInt(Integer::parseInt)
-                .toArray();
+        for (int row = 0; row < size; row++) {
+            int[] arr = readMatrix(scanner);
+            for (int col = 0; col < arr.length; col++) {
+                matrix[row] = arr;
+            }
+        }
+        return matrix;
     }
 }

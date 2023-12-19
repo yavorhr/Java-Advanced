@@ -1,17 +1,20 @@
-import java.util.Arrays;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        String[][] matrix = fillMatrix(scanner);
+        int rows = scanner.nextInt();
+        int cols = scanner.nextInt();
+        scanner.nextLine();
+
+        String[][] matrix = fillMatrix(scanner, rows, cols);
 
         String input = scanner.nextLine();
-        while (!"END".equals(input)) {
-            String[] tokens = input.split("\\s+");
-            int components = tokens.length;
-            if (!tokens[0].equals("swap") || components != 5) {
+        while (!input.equals("END")) {
+            String[] tokens = input.split(" ");
+
+            if (tokens.length != 5 && !tokens[0].equals("swap")) {
                 System.out.println("Invalid input!");
                 input = scanner.nextLine();
                 continue;
@@ -22,37 +25,23 @@ public class Main {
             int row2 = Integer.parseInt(tokens[3]);
             int col2 = Integer.parseInt(tokens[4]);
 
-            if (isInBounds(matrix, row1, col1) && (isInBounds(matrix, row2, col2))) {
-                String temp = matrix[row1][col1];
-                matrix[row1][col1] = matrix[row2][col2];
-                matrix[row2][col2] = temp;
-            } else {
+            if (outOfBounds(matrix, row1, col1) || outOfBounds(matrix, row2, col2)) {
                 System.out.println("Invalid input!");
                 input = scanner.nextLine();
                 continue;
             }
-            printMatrix(matrix);
+
+            changeValuesInMatrix(matrix, row1, col1, row2, col2);
             input = scanner.nextLine();
         }
     }
 
-    private static String[][] fillMatrix(Scanner scanner) {
-        int[] dimensions = Arrays.stream(scanner.nextLine().split("\\s+"))
-                .mapToInt(Integer::parseInt)
-                .toArray();
+    private static void changeValuesInMatrix(String[][] matrix, int row1, int col1, int row2, int col2) {
+        String temp = matrix[row1][col1];
+        matrix[row1][col1] = matrix[row2][col2];
+        matrix[row2][col2] = temp;
 
-        int rows = dimensions[0];
-        int cols = dimensions[1];
-
-        String[][] matrix = new String[rows][cols];
-
-        for (int row = 0; row < rows; row++) {
-            String[] arr = scanner.nextLine().split("\\s+");
-            for (int col = 0; col < cols; col++) {
-                matrix[row][col] = arr[col];
-            }
-        }
-        return matrix;
+        printMatrix(matrix);
     }
 
     private static void printMatrix(String[][] matrix) {
@@ -64,13 +53,19 @@ public class Main {
         }
     }
 
-    private static boolean isInBounds(String[][] matrix, int row, int col) {
-        return row >= 0 && row < matrix.length && col >= 0 && col < matrix[row].length;
+    private static boolean outOfBounds(String[][] matrix, int row, int col) {
+        return row < 0 || row >= matrix.length || col < 0 || col >= matrix[row].length;
+    }
+
+    private static String[][] fillMatrix(Scanner scanner, int rows, int cols) {
+        String[][] matrix = new String[rows][cols];
+
+        for (int row = 0; row < rows; row++) {
+            String[] arr = scanner.nextLine().split(" ");
+            for (int col = 0; col < arr.length; col++) {
+                matrix[row][col] = arr[col];
+            }
+        }
+        return matrix;
     }
 }
-
-
-
-
-
-

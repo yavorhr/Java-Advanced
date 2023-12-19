@@ -1,32 +1,15 @@
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        int[] dimensions = Arrays.stream(scanner.nextLine().split("\\s+"))
-                .mapToInt(Integer::parseInt)
-                .toArray();
+        int rows = scanner.nextInt();
+        int cols = scanner.nextInt();
+        scanner.nextLine();
 
-        int rows = dimensions[0];
-        int cols = dimensions[1];
-
-        String[][] matrix = new String[rows][cols];
-
-        extractPalindrome(rows, cols, matrix);
+        String[][] matrix = generatePalindromeMatrix(rows, cols);
         printMatrix(matrix);
-    }
-
-    private static void extractPalindrome(int rows, int cols, String[][] matrix) {
-        char startLetter = 'a';
-        for (int row = 0; row < rows; row++) {
-            for (int col = 0; col < cols; col++) {
-                String palindrome = "" + startLetter + (char) (startLetter + col) + startLetter;
-                matrix[row][col] = palindrome;
-            }
-            startLetter = (char) (startLetter + 1);
-        }
     }
 
     private static void printMatrix(String[][] matrix) {
@@ -37,6 +20,17 @@ public class Main {
             System.out.println();
         }
     }
+
+    private static String[][] generatePalindromeMatrix(int rows, int cols) {
+        String[][] matrix = new String[rows][cols];
+
+        char startLetter = 'a';
+        for (int row = 0; row < rows; row++) {
+            for (int col = 0; col < cols; col++) {
+                matrix[row][col] = "" + startLetter + (char) (startLetter + col) + startLetter;
+            }
+            startLetter += 1;
+        }
+        return matrix;
+    }
 }
-
-

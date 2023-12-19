@@ -4,33 +4,51 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        int rows = scanner.nextInt();
-        int cols = scanner.nextInt();
-        scanner.nextLine();
+        int size = Integer.parseInt(scanner.nextLine());
+        int[][] matrix = new int[size][size];
 
-        String[][] matrix = generatePalindromeMatrix(rows, cols);
-        printMatrix(matrix);
+        fillMatrix(scanner, size, matrix);
+
+        int primarySum = getPrimaryDiagonalSum(matrix);
+        int secondarySum = getSecondaryDiagonalSum(matrix);
+
+        printResult(primarySum,secondarySum);
     }
 
-    private static void printMatrix(String[][] matrix) {
-        for (int row = 0; row < matrix.length; row++) {
-            for (int col = 0; col < matrix[row].length; col++) {
-                System.out.print(matrix[row][col] + " ");
-            }
-            System.out.println();
-        }
+    private static void printResult(int primarySum, int secondarySum) {
+        System.out.println(Math.abs(primarySum-secondarySum));
     }
 
-    private static String[][] generatePalindromeMatrix(int rows, int cols) {
-        String[][] matrix = new String[rows][cols];
+    private static int getSecondaryDiagonalSum(int[][] matrix) {
+        int sum = 0;
+        int size = matrix.length;
 
-        char startLetter = 'a';
-        for (int row = 0; row < rows; row++) {
-            for (int col = 0; col < cols; col++) {
-                matrix[row][col] = "" + startLetter + (char) (startLetter + col) + startLetter;
-            }
-            startLetter += 1;
+        for (int row = 0; row < size; row++) {
+            sum += matrix[size - 1 - row][row];
         }
-        return matrix;
+
+        return Math.abs(sum);
+    }
+
+    private static int getPrimaryDiagonalSum(int[][] matrix) {
+        int sum = 0;
+        int size = matrix.length;
+
+        for (int row = 0; row < size; row++) {
+            sum += matrix[row][row];
+        }
+
+        return Math.abs(sum);
+    }
+
+    private static void fillMatrix(Scanner scanner, int size, int[][] matrix) {
+        for (int row = 0; row < size; row++) {
+            String[] line = scanner.nextLine().split(" ");
+            for (int col = 0; col < size; col++) {
+                int currentN = Integer.parseInt(line[col]);
+                matrix[row][col] = currentN;
+            }
+        }
+
     }
 }

@@ -1,36 +1,40 @@
 import java.util.*;
 
 public class Main {
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        HashSet<String> parkingLot = new LinkedHashSet<>();
-
         String input = scanner.nextLine();
+        LinkedHashSet<String> parkingLot = new LinkedHashSet<>();
+
         while (!"END".equals(input)) {
-            String[] token = input.split(", ");
-            String direction = token[0];
-            String carNumber = token[1];
+            String[] tokens = input.split(", ");
+            String direction = tokens[0];
+            String licenseNumber = tokens[1];
 
             if (direction.equals("IN")) {
-                parkingLot.add(carNumber);
-            } else {
-                parkingLot.remove(carNumber);
+                parkingLot.add(licenseNumber);
+            } else if (direction.equals("OUT")) {
+                parkingLot.remove(licenseNumber);
             }
+
             input = scanner.nextLine();
         }
 
-        for (String car : parkingLot) {
-            System.out.println(car);
-        }
 
+        String result = String.join(System.lineSeparator(), parkingLot);
+        printResult(parkingLot,result);
+    }
+    private static void printResult(HashSet<String> parkingLot, String result) {
         if (parkingLot.isEmpty()) {
             System.out.println("Parking Lot is Empty");
+        } else {
+            System.out.println(result);
         }
+
     }
 }
-
-
 
 
 

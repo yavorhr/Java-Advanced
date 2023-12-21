@@ -8,34 +8,19 @@ public class Main {
         String input = scanner.nextLine();
 
         for (int i = 0; i < input.length(); i++) {
-            char currSymbol = input.charAt(i);
-
-            if (countSymbols.containsKey(currSymbol)) {
-                int currentCount = countSymbols.get(currSymbol);
-                countSymbols.put(currSymbol, currentCount + 1);
-            } else {
-                countSymbols.putIfAbsent(currSymbol, 1);
-            }
+            char currentChar = input.charAt(i);
+            addToMap(countSymbols, currentChar);
         }
+        printResult(countSymbols);
+    }
 
-        countSymbols.entrySet().forEach(e -> {
-            System.out.println(String.format("%c: %d time/s", e.getKey(), e.getValue()));
-        });
+    private static void printResult(Map<Character, Integer> countSymbols) {
+        countSymbols.entrySet().forEach(entry -> System.out.printf("%c: %d time/s\n", entry.getKey(), entry.getValue()));
+    }
+
+    private static void addToMap(Map<Character, Integer> countSymbols, char currentChar) {
+        countSymbols.putIfAbsent(currentChar, 0);
+        int currentCount = countSymbols.get(currentChar);
+        countSymbols.put(currentChar, currentCount + 1);
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

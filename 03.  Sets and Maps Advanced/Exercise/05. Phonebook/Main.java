@@ -4,49 +4,34 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        HashMap<String, String> addressBook = new HashMap<>();
+        Map<String, String> phoneBook = new HashMap<>();
 
         String input = scanner.nextLine();
         while (!input.equals("search")) {
             String[] tokens = input.split("-");
             String name = tokens[0];
-            String phoneNumber = tokens[1];
+            String number = tokens[1];
 
-            addressBook.put(name, phoneNumber);
+            phoneBook.put(name, number);
 
             input = scanner.nextLine();
         }
 
-        String searchContact = scanner.nextLine();
+        input = scanner.nextLine();
+        while (!input.equals("stop")) {
+            String name = input;
 
-        while (!searchContact.equals("stop")) {
-            String contact = searchContact;
+            printResult(phoneBook, name);
 
-            if (!addressBook.containsKey(contact)) {
-                System.out.printf("Contact %s does not exist.%n", contact);
-            } else {
-                System.out.println(String.format("%s -> %s",contact,addressBook.get(contact)));
-            }
-            searchContact = scanner.nextLine();
+            input = scanner.nextLine();
+        }
+    }
+
+    private static void printResult(Map<String, String> phoneBook, String name) {
+        if (phoneBook.containsKey(name)) {
+            System.out.printf("%s -> %s\n", name, phoneBook.get(name));
+        } else {
+            System.out.printf("Contact %s does not exist.\n", name);
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

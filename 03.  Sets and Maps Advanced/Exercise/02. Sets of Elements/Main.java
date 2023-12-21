@@ -4,38 +4,30 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
+        LinkedHashSet<Integer> firstSet = new LinkedHashSet<>();
+        LinkedHashSet<Integer> secondSet = new LinkedHashSet<>();
+
         int n = scanner.nextInt();
         int m = scanner.nextInt();
         scanner.nextLine();
 
-        Set<Integer> firstSet = new LinkedHashSet<>();
-        Set<Integer> secondSet = new LinkedHashSet<>();
-
-        for (int i = 0; i < n; i++) {
-            int number = Integer.parseInt(scanner.nextLine());
-            firstSet.add(number);
-        }
-
-        for (int i = 0; i < m; i++) {
-            int number = Integer.parseInt(scanner.nextLine());
-            secondSet.add(number);
-        }
+        addNumbersToSet(scanner, firstSet, n);
+        addNumbersToSet(scanner, secondSet, m);
 
         firstSet.retainAll(secondSet);
+        printResult(firstSet);
+    }
 
-        firstSet.forEach(number -> System.out.print(number + " "));
+    private static void printResult(LinkedHashSet<Integer> set) {
+        set.forEach(n -> System.out.print(n + " "));
+    }
+
+    private static void addNumbersToSet(Scanner scanner, LinkedHashSet<Integer> firstSet, int n) {
+        while (n > 0) {
+            int num = Integer.parseInt(scanner.nextLine());
+            firstSet.add(num);
+
+            n--;
+        }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

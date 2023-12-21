@@ -5,23 +5,36 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        Map<Double, Integer> numbers = new LinkedHashMap<>();
+        Map<Double, Integer> countNumbers = new LinkedHashMap<>();
 
-        Arrays.stream(scanner.nextLine().split("\\s+"))
-                .map(Double::parseDouble)
-                .forEach(n -> {
-                    numbers.putIfAbsent(n, 0);
-                    numbers.put(n, numbers.get(n) + 1);
-                });
+        Arrays.stream(scanner.nextLine().split(" ")).map(Double::parseDouble).forEach(n -> {
+            countNumbers.putIfAbsent(n, 0);
 
-        String output = numbers.entrySet()
+            int incrementCurrentCount = countNumbers.get(n) + 1;
+            countNumbers.put(n, incrementCurrentCount);
+        });
+
+
+        printMap(countNumbers);
+    }
+
+    private static void printMap(Map<Double, Integer> countNumbers) {
+        String result = countNumbers
+                .entrySet()
                 .stream()
-                .map(entry -> String.format("%.1f -> %d", entry.getKey(), entry.getValue()))
+                .map(e -> String.format("%.1f -> %d",
+                        e.getKey(),
+                        e.getValue()))
                 .collect(Collectors.joining(System.lineSeparator()));
 
-        System.out.println(output);
+        System.out.println(result);
     }
 }
+
+
+
+
+
 
 
 

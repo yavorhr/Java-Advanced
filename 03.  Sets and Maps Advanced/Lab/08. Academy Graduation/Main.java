@@ -2,42 +2,32 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class Main {
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        Map <String, Double> studentGrades = new TreeMap<>();
-        int studentNumbers = Integer.parseInt(scanner.nextLine());
+        Map<String, String> registry = new TreeMap<>();
 
-        for (int i = 0; i < studentNumbers; i++) {
+        int n = Integer.parseInt(scanner.nextLine());
+        while (n > 0) {
             String name = scanner.nextLine();
-            List<Double> grades = Arrays.stream(scanner.nextLine().split("\\s+"))
-                    .map(Double::parseDouble)
-                    .collect(Collectors.toList());
 
-            double sum = 0;
+            double avgGrade = getAvgGrade(scanner);
 
-            for (Double grade : grades) {
-                sum += grade;
-            }
+            String currentStudentResult = String.format("%s is graduated with %.4f", name, avgGrade);
+            registry.put(name, currentStudentResult);
 
-            double avg = sum / grades.size();
-            studentGrades.putIfAbsent(name,avg );
-
+            n--;
         }
-        studentGrades.entrySet().
-                forEach(entry -> System.out.println(String.format("%s is graduated with " + entry.getValue(), entry.getKey())));
 
+        printResult(registry);
+    }
+
+    private static void printResult(Map<String, String> registry) {
+        registry.values().forEach(System.out::println);
+    }
+
+    private static double getAvgGrade(Scanner scanner) {
+        return Arrays.stream(scanner.nextLine().split(" ")).mapToDouble(Double::valueOf).average().getAsDouble();
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-

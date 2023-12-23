@@ -1,6 +1,7 @@
 import java.util.*;
 
 public class Main {
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
@@ -21,12 +22,11 @@ public class Main {
                 playerCards.put(name, newDeck);
             }
             input = scanner.nextLine();
-
         }
 
         for (Map.Entry<String, Set<String>> player : playerCards.entrySet()) {
             int points = calculatePoints(player.getValue());
-            System.out.println(String.format("%s: %d", player.getKey(), points));
+            System.out.printf("%s: %d\n", player.getKey(), points);
         }
 
     }
@@ -36,7 +36,6 @@ public class Main {
 
         HashMap<Character, Integer> powers = getLettersPower();
 
-        //playerValue -> 2C
         for (String card : cards) {
             if (card.contains("10")) {
                 sum += 10 * powers.get(card.charAt(2));
@@ -75,22 +74,3 @@ public class Main {
         return powers;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

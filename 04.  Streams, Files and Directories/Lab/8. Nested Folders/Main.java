@@ -4,33 +4,29 @@ import java.util.Deque;
 
 public class Main {
     public static void main(String[] args) throws IOException {
+        File rootFolder = new File("E:\\1. SoftUni\\Code\\Java\\" +
+                "03. Java Advanced\\Advanced\\" +
+                "04. Streams, Files And Directories - Lab\\LAB\\" +
+                "04. Java-Advanced-Files-and-Streams-Lab-Resources\\" +
+                "Files-and-Streams");
 
-        File file = new File("C:\\Users\\YavorHr\\Documents\\1. SoftUni\\Advanced\\4. Streams, Files And Directories - Lab\\04. Java-Advanced-Files-and-Streams-Lab-Resources\\Files-and-Streams");
+        Deque<File> dirs = new ArrayDeque<>();
 
-        Deque<File> deque = new ArrayDeque<>();
-        deque.add(file);
-        int count = 1;
+        dirs.add(rootFolder);
 
-        while (!deque.isEmpty()) {
-            File f = deque.poll();
+        int count = 0;
+
+        while (!dirs.isEmpty()) {
+            File current = dirs.poll();
+            File[] nestedFiles = current.listFiles();
+            for (File nestedFile : nestedFiles)
+                if (nestedFile.isDirectory())
+                    dirs.offer(nestedFile);
             count++;
-            System.out.println(f.getName());
-
-            File[] files = file.listFiles();
-            for (File innerFile : files) {
-                if (innerFile.isDirectory()) {
-                    deque.offer(innerFile);
-                }
-            }
+            System.out.println(current.getName());
         }
-        System.out.println(count);
+        System.out.println(count + " folders");
+
     }
 }
-
-
-
-
-
-
-
 

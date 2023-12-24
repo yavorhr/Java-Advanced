@@ -1,24 +1,23 @@
-
 import java.io.*;
 
 public class Main {
     public static void main(String[] args) throws IOException {
 
-        File file = new File("C:\\Users\\YavorHr\\Documents\\1. SoftUni\\Advanced\\4. Streams, Files And Directories - Lab\\04. Java-Advanced-Files-and-Streams-Lab-Resources");
+        File file = new File("C:\\Users\\YavorHr\\Desktop\\Demo\\Files-and-Streams");
         File[] files = file.listFiles();
 
         for (File f : files) {
-            if (!f.isDirectory()) {
-                System.out.println(f.length());
-            }
+            printFileNameAndLength(f);
         }
 
     }
+
+    private static void printFileNameAndLength(File f) {
+        if (!f.isDirectory()) {
+            System.out.printf("%s: [%s]%n",
+                    f.getName(), f.length());
+
+        }
+    }
 }
-
-
-
-
-
-
 

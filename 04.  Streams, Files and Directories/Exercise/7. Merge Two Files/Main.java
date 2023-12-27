@@ -1,38 +1,38 @@
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws IOException {
+        List<String> firstFileList = readDataFromFile("inputOne.txt");
+        List<String> secondFileList = readDataFromFile("inputTwo.txt");
 
-        Path firstPath = Path.of("C:\\Users\\YavorHr\\Documents\\1. SoftUni\\Advanced\\4. Streams, Files And Directories - Lab\\УПР\\04. Java-Advanced-Streams-Files-and-Directories-Resources\\04. Java-Advanced-Files-and-Streams-Exercises-Resources\\inputOne.txt");
-        List<String> linesFirstFile = Files.readAllLines(firstPath);
+        List<String> mergedLists = mergeListsData(firstFileList, secondFileList);
 
-        Path secondPath = Path.of("C:\\Users\\YavorHr\\Documents\\1. SoftUni\\Advanced\\4. Streams, Files And Directories - Lab\\УПР\\04. Java-Advanced-Streams-Files-and-Directories-Resources\\04. Java-Advanced-Files-and-Streams-Exercises-Resources\\inputTwo.txt");
-        List<String> linesSecondFile = Files.readAllLines(secondPath);
+        writeOutputToFile(mergedLists);
+    }
 
-        PrintWriter writer = new PrintWriter("merge.txt");
-        linesFirstFile.forEach(writer::println);
-        linesSecondFile.forEach(writer::println);
+    private static void writeOutputToFile(List<String> outputList) throws FileNotFoundException {
+        PrintWriter printWriter = new PrintWriter("output.txt");
+        outputList.forEach(printWriter::println);
 
-        writer.close();
+        printWriter.close();
+    }
+
+    private static List<String> readDataFromFile(String path) throws IOException {
+        Path firstPath = Path.of("inputOne.txt");
+        return Files.readAllLines(firstPath);
+    }
+
+    private static List<String> mergeListsData(List<String> firstFileList, List<String> secondFileList) {
+        List<String> outputList = new ArrayList<>();
+
+        outputList.addAll(firstFileList);
+        outputList.addAll(secondFileList);
+
+        return outputList;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

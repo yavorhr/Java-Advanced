@@ -5,30 +5,21 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws IOException {
+        Path filePath = Path.of("inputLineNumbers.txt");
 
-        Path pathfile = Path.of("C:\\Users\\YavorHr\\Documents\\1. SoftUni\\Advanced\\4. Streams, Files And Directories - Lab\\УПР\\04. Java-Advanced-Streams-Files-and-Directories-Resources\\04. Java-Advanced-Files-and-Streams-Exercises-Resources\\inputLineNumbers.txt");
-        List<String> lines = Files.readAllLines(pathfile);
+        List<String> lines = Files.readAllLines(filePath);
 
-        PrintWriter writer = new PrintWriter("outputLines.txt");
+        writeResultToFile(lines);
+    }
+
+    private static void writeResultToFile(List<String> lines) throws FileNotFoundException {
+        PrintWriter printWriter = new PrintWriter("output.txt");
+
         int row = 1;
-        for (String line : lines) {
-            writer.println(row++ + ". " + line);
+        for (String line: lines) {
+            printWriter.println(String.format("%d. %s", row++, line));
         }
-        writer.close();
+        printWriter.close();
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

@@ -1,59 +1,47 @@
 import java.io.*;
 
+
 public class Main {
-
     public static void main(String[] args) throws IOException {
+        String path = "input.txt";
 
-        String pathfile = "C:\\Users\\YavorHr\\Documents\\1. SoftUni\\Advanced" +
-                "\\4. Streams, Files And Directories - Lab\\УПР\\04. Java-Advanced-Streams-Files-and-Directories-Resources" +
-                "\\04. Java-Advanced-Files-and-Streams-Exercises-Resources\\input.txt";
-
-        int countVowels = 0;
-        int consonants = 0;
-        int countPunctuation = 0;
+        int vowelsCount = 0;
+        int consonantsCount = 0;
+        int punctuationsCount = 0;
 
         String vowels = "aeiou";
-        String punctuation = "!?.,";
-        BufferedReader reader = new BufferedReader(new FileReader(pathfile));
-        String line = reader.readLine();
+        String punctuations = "!?.,";
+
+        BufferedReader bufferedReader = new BufferedReader(new FileReader(path));
+        String line = bufferedReader.readLine();
+
         while (line != null) {
             String[] words = line.split("\\s+");
-            for (String word : words) {
-                for (char symbol : word.toCharArray()) {
-                    String charAsString = String.valueOf(symbol);
-                    if (vowels.contains(charAsString)) {
-                        countVowels++;
-                    } else if (punctuation.contains(charAsString)) {
-                        countPunctuation++;
+            for (String currentWord : words) {
+                for (char currentChar : currentWord.toCharArray()) {
+                    String currentCharAsString = String.valueOf(currentChar);
+                    if (vowels.contains(currentCharAsString)) {
+                        vowelsCount++;
+                    } else if (punctuations.contains(currentCharAsString)) {
+                        punctuationsCount++;
                     } else {
-                        consonants++;
+                        consonantsCount++;
                     }
                 }
             }
-
-            line = reader.readLine();
-
+            line = bufferedReader.readLine();
         }
-        reader.close();
 
-        PrintWriter writer = new PrintWriter("outputCount.txt");
-        writer.println("Vowels: " + countVowels);
-        writer.println("Consonants: " + consonants);
-        writer.println("Punctuation: " + countPunctuation);
+        writeResultToFile(vowelsCount, consonantsCount, punctuationsCount);
+    }
 
-        writer.close();
+    private static void writeResultToFile(int vowelsCount, int consonantsCount, int punctuationsCount) throws FileNotFoundException {
+        PrintWriter printWriter = new PrintWriter("output.txt");
+        printWriter.println("Vowels: " + vowelsCount);
+        printWriter.println("Consonants: " + consonantsCount);
+        printWriter.println("Punctuation: " + punctuationsCount);
+
+        printWriter.close();
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
 

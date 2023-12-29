@@ -1,4 +1,3 @@
-package Google;
 
 public class BankAccount {
 
@@ -25,7 +24,6 @@ public class BankAccount {
     public void deposit(double amount) {
         this.balance += amount;
         System.out.println(String.format("Deposited %.0f to ID%d", amount, this.id));
-
     }
 
     public int getId() {

@@ -1,5 +1,4 @@
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Main {
     public static void main(String[] args) {
@@ -27,7 +26,7 @@ public class Main {
                         bankAccounts.put(id, bankAccount);
                         System.out.printf("Deposited %.2f to ID%d\n", balance, id);
                     } else {
-                        System.out.println("Account does not exist");
+                        printNotExist();
                     }
                 }
                 case "GetInterest" -> {
@@ -37,7 +36,7 @@ public class Main {
                         double calculatedInterest = bankAccounts.get(id).getInterest(years);
                         System.out.printf("%.2f\n", calculatedInterest);
                     } else {
-                        System.out.println("Account does not exist");
+                        printNotExist();
                     }
                 }
                 case "SetInterest" -> {
@@ -45,10 +44,12 @@ public class Main {
                     BankAccount.setInterestRate(balance);
                 }
             }
-
             input = scanner.nextLine();
         }
-        System.out.println();
+    }
+
+    private static void printNotExist() {
+        System.out.println("Account does not exist");
     }
 
     private static BankAccount createBankAccount(Map<Integer, BankAccount> bankAccounts) {
@@ -59,14 +60,6 @@ public class Main {
 
     private static boolean doesAccountExist(Map<Integer, BankAccount> bankAccounts, int id) {
         return bankAccounts.containsKey(id);
-    }
-
-    private static boolean doesAccountExist(BankAccount bankAccount) {
-        return bankAccount != null;
-    }
-
-    private static BankAccount getBankAccount(List<BankAccount> bankAccountsList, int id) {
-        return bankAccountsList.stream().filter(b -> b.getId() == id).findFirst().orElse(null);
     }
 }
 

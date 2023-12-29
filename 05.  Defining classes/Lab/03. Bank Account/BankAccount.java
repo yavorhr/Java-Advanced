@@ -1,35 +1,53 @@
-
 public class BankAccount {
-
-    //броим всички сметки, които се отварят за различните инстанции на класа;
-    private static int idCounter = 1;
     private int id;
     private double balance;
-    //променяме лихв. % за всички сметки със статична променлива
+
+    private static int accountsCounter = 1;
     private static double interestRate = 0.02;
 
     public BankAccount() {
-        this.id = idCounter++;
-        System.out.println(String.format("Account ID%d created", this.id));
+        this.id = accountsCounter++;
     }
 
-    public static void setInterestRate(double rate) {
-        interestRate = rate;
+    public static void setInterestRate(double interest) {
+        BankAccount.interestRate = interest;
     }
 
     public double getInterest(int years) {
-        return (this.balance * interestRate) * years;
+        return this.balance * BankAccount.interestRate * years;
     }
 
     public void deposit(double amount) {
         this.balance += amount;
-        System.out.println(String.format("Deposited %.0f to ID%d", amount, this.id));
     }
 
     public int getId() {
-        return this.id;
+        return id;
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+
+    public static int getAccountsCounter() {
+        return accountsCounter;
+    }
+
+    public static double getInterestRate() {
+        return interestRate;
+    }
+
+    public BankAccount setId(int id) {
+        this.id = id;
+        return this;
+    }
+
+    public BankAccount setBalance(double balance) {
+        this.balance = balance;
+        return this;
+    }
+
+    public static void setAccountsCounter(int accountsCounter) {
+        BankAccount.accountsCounter = accountsCounter;
     }
 }
-
-
-

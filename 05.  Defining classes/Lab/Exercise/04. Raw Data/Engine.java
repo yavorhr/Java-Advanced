@@ -1,17 +1,27 @@
-package raw;
-
 public class Engine {
-    //<EngineSpeed> <EnginePower
-    private int engineSpeed;
-    private int enginePower;
+    private int speed;
+    private int power;
 
-    public Engine(int engineSpeed, int enginePower) {
-        this.engineSpeed = engineSpeed;
-        this.enginePower = enginePower;
+    public Engine(int speed, int power) {
+        this.speed = speed;
+        this.power = power;
     }
 
-    public int getEnginePower() {
-        return this.enginePower;
+    public int getSpeed() {
+        return speed;
     }
 
+    public Engine setSpeed(int speed) {
+        this.speed = speed;
+        return this;
+    }
+
+    public int getPower() {
+        return power;
+    }
+
+    public Engine setPower(int power) {
+        this.power = power;
+        return this;
+    }
 }

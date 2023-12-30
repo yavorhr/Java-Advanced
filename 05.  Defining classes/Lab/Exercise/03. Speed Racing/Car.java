@@ -1,33 +1,64 @@
 public class Car {
-    //Model, fuel amount, fuel cost for 1 kilometer and distance traveled.
     private String model;
-    private double fuel;
-    private double consumption;
+    private double fuelLiters;
+    private double fuelCostPerKm;
     private int distance;
 
-
-    public Car(String model, double fuel, double consumption) {
+    public Car(String model, double fuelLiters, double fuelCostPerKm) {
         this.model = model;
-        this.fuel = fuel;
-        this.consumption = consumption;
+        this.fuelLiters = fuelLiters;
+        this.fuelCostPerKm = fuelCostPerKm;
         this.distance = 0;
     }
 
-    public boolean drive(int distanceToDrive) {
-        //растояние -> колко гориво ще ни отнеме
-        double needFuel = distanceToDrive * this.consumption;
-        if (needFuel <= this.fuel) {
-            //изминаваме разстоянието;
-            this.distance += distanceToDrive;
-            this.fuel -= needFuel;
-            return true;
-        }
-        return false;
+    public String getModel() {
+        return model;
+    }
+
+    public Car setModel(String model) {
+        this.model = model;
+        return this;
+    }
+
+    public double getFuelLiters() {
+        return fuelLiters;
+    }
+
+    public Car setFuelLiters(double fuelLiters) {
+        this.fuelLiters = fuelLiters;
+        return this;
+    }
+
+    public double getFuelCostPerKm() {
+        return fuelCostPerKm;
+    }
+
+    public Car setFuelCostPerKm(double fuelCostPerKm) {
+        this.fuelCostPerKm = fuelCostPerKm;
+        return this;
+    }
+
+    public int getDistance() {
+        return distance;
+    }
+
+    public Car setDistance(int distance) {
+        this.distance = distance;
+        return this;
     }
 
     @Override
     public String toString() {
-        // AudiA4 23 0.3
-        return String.format("%s %.2f %d", this.model, this.fuel, this.distance);
+        return String.format("%s %.2f %d", getModel(), getFuelLiters(), getDistance());
+    }
+
+    public boolean drive(int distanceToDrive) {
+        double possibleDistance = this.fuelLiters / this.fuelCostPerKm;
+        if (possibleDistance >= distanceToDrive) {
+            this.distance += distanceToDrive;
+            this.fuelLiters -= distanceToDrive * fuelCostPerKm;
+            return true;
+        }
+        return false;
     }
 }

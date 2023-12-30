@@ -1,21 +1,34 @@
-package raw;
-
 public class Tire {
-    //Tire1Pressure> <Tire1Age> <Tire2Pressure> <Tire2Age> <Tire3Pressure> <Tire3Age> <Tire4Pressure> <Tire4Age>"
+    private double pressure;
+    private int age;
 
-    private double tirePressure;
-    private int tireAge;
+    public Tire(double pressure, int age) {
+        this.pressure = pressure;
+        this.age = age;
+    }
 
-    public Tire(double tirePressure, int tireAge) {
-        this.tirePressure = tirePressure;
-        this.tireAge = tireAge;
+    public double getPressure() {
+        return pressure;
+    }
+
+    public Tire setPressure(double pressure) {
+        this.pressure = pressure;
+        return this;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public Tire setAge(int age) {
+        this.age = age;
+        return this;
     }
 
     public boolean isFlat() {
-        if (tirePressure < 1) {
+        if (this.pressure < 1.00) {
             return true;
         }
         return false;
     }
-
 }

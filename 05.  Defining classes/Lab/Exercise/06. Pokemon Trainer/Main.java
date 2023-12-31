@@ -1,50 +1,52 @@
-package Pockemon;
 import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        Map<String, Trainer> trainers = new LinkedHashMap<>();
+        Map<String, Trainer> trainersMap = new LinkedHashMap<>();
 
         String input = scanner.nextLine();
         while (!"Tournament".equals(input)) {
-            String[] tokens = input.split("\\s+");
-
+            String[] tokens = input.split(" ");
             String trainerName = tokens[0];
-            String pokemon = tokens[1];
+            String pokemonName = tokens[1];
             String pokemonElement = tokens[2];
             int pokemonHealth = Integer.parseInt(tokens[3]);
 
-            Trainer trainer = new Trainer(trainerName);
-            Pokemon caughtPokemon = new Pokemon(pokemon, pokemonElement, pokemonHealth);
-
-            trainers.putIfAbsent(trainerName, trainer);
-            trainers.get(trainerName).addPokemon(caughtPokemon);
+            Pokemon pokemon = new Pokemon(pokemonName, pokemonHealth, pokemonElement);
+            addTrainerToMap(trainersMap, trainerName, pokemon);
 
             input = scanner.nextLine();
         }
-        input = scanner.nextLine();
 
-        while (!input.equals("End")) {
+        input = scanner.nextLine();
+        while (!"End".equals(input)) {
             String element = input;
-            for (Trainer trainer : trainers.values()) {
-                if (trainer.hasElementType(element)){
+
+            for (Trainer trainer : trainersMap.values()) {
+                if (trainer.hasElement(element)) {
                     trainer.increaseBadges(1);
                 } else {
                     trainer.damagePokemons(10);
                 }
-            };
+            }
             input = scanner.nextLine();
         }
+        printResult(trainersMap);
+    }
 
-        trainers.entrySet().stream().sorted((f,s) ->
-            s.getValue().getBadges() - f.getValue().getBadges()
-        ).forEach(entry->{
-            System.out.println(entry.getValue().toString());
-        });
+    private static void addTrainerToMap(Map<String, Trainer> trainersMap, String trainerName, Pokemon pokemon) {
+        trainersMap.putIfAbsent(trainerName, new Trainer(trainerName));
+        Trainer trainer = trainersMap.get(trainerName);
+        trainer.getPokemons().add(pokemon);
+
+        trainersMap.put(trainerName, trainer);
+    }
+
+    private static void printResult(Map<String, Trainer> trainersMap) {
+        trainersMap.values().stream().sorted((t1, t2) -> t2.getBadges() - t1.getBadges()).forEach(System.out::println);
     }
 }
-
 
 

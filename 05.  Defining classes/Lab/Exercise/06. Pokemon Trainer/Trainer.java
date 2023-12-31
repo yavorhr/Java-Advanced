@@ -1,80 +1,63 @@
-package Pockemon;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Trainer {
-
     private String name;
     private int badges;
-    //добавяне покемоните по ключ "елемент" и колекция лист oт покемони
-    private Map<String, List<Pokemon>> pokemons;
+    private List<Pokemon> pokemons;
 
     public Trainer(String name) {
         this.name = name;
         this.badges = 0;
-        this.setPokemons();
+        this.pokemons = new ArrayList<>();
     }
 
-    public void setPokemons() {
-        this.pokemons = new HashMap<>();
-        this.pokemons.put("Fire", new ArrayList<>());
-        this.pokemons.put("Water", new ArrayList<>());
-        this.pokemons.put("Electricity", new ArrayList<>());
+    public String getName() {
+        return name;
+    }
 
+    public Trainer setName(String name) {
+        this.name = name;
+        return this;
     }
 
     public int getBadges() {
-        return this.badges;
+        return badges;
     }
 
-    public void addPokemon(Pokemon pokemon) {
-        this.pokemons.putIfAbsent(pokemon.getElement(),new ArrayList<>());
-        this.pokemons.get(pokemon.getElement()).add(pokemon);
-
+    public Trainer setBadges(int badges) {
+        this.badges = badges;
+        return this;
     }
 
-    public boolean hasElementType(String element) {
-        return this.pokemons.get(element).size() != 0;
+    public List<Pokemon> getPokemons() {
+        return pokemons;
     }
 
-    public void increaseBadges(int increment) {
-        this.badges += increment;
+    public Trainer setPokemons(List<Pokemon> pokemons) {
+        this.pokemons = pokemons;
+        return this;
+    }
+
+    public boolean hasElement(String element) {
+        return this.pokemons.stream().anyMatch(p -> p.getElement().equals(element));
+    }
+
+    public void increaseBadges(int incrementAmount) {
+        this.badges += incrementAmount;
     }
 
     public void damagePokemons(int damage) {
-        for (List<Pokemon> value : pokemons.values()) {
-            for (Pokemon pokemon : value) {
-                pokemon.takeDamage(damage);
-            }
-        }
+        this.pokemons.forEach(p -> p.takeDamage(damage));
         this.clearDeadPokemons();
     }
 
     private void clearDeadPokemons() {
-        for (List<Pokemon> value : pokemons.values()) {
-            value.removeIf(p -> p.getHealth() <= 0);
-
-        }
-    }
-
-    public int getPokemonsCount() {
-        int size = 0;
-        for (List<Pokemon> value : pokemons.values()) {
-            size += value.size();
-        }
-        return size;
+        getPokemons().removeIf(p -> p.getHealth() <= 0);
     }
 
     @Override
     public String toString() {
-        return String.format("%s %d %d", this.name, this.badges, this.getPokemonsCount());
+        return String.format("%s %d %d", getName(), getBadges(), getPokemons().size());
     }
 }
-
-
-
-
-

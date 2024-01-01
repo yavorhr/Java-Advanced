@@ -1,5 +1,3 @@
-package Google;
-
 public class Company {
     private String name;
     private String department;
@@ -15,28 +13,31 @@ public class Company {
         return name;
     }
 
-    public void setName(String name) {
+    public Company setName(String name) {
         this.name = name;
+        return this;
     }
 
     public String getDepartment() {
         return department;
     }
 
-    public void setDepartment(String department) {
+    public Company setDepartment(String department) {
         this.department = department;
+        return this;
     }
 
     public double getSalary() {
         return salary;
     }
 
-    public void setSalary(double salary) {
+    public Company setSalary(double salary) {
         this.salary = salary;
+        return this;
     }
 
     @Override
     public String toString() {
-        return String.format("%s %s %.2f", this.name, this.department, this.salary);
+        return String.format("%s %s %.2f", getName(), getDepartment(), getSalary());
     }
 }

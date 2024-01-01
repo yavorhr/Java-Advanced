@@ -1,123 +1,79 @@
-package Google;
-
 import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
+        Map<String, Person> personsMap = new HashMap<>();
+
         String input = scanner.nextLine();
-        List<Person> people = new ArrayList<>();
         while (!"End".equals(input)) {
-            String[] tokens = input.split("\\s+");
+            String[] tokens = input.split(" ");
             String name = tokens[0];
+            String criteria = tokens[1];
 
-            Person person = new Person(name);
+            personsMap.putIfAbsent(name, new Person(name));
+            Person person = personsMap.get(name);
 
-            boolean hasPerson = false;
-            for (Person currentPerson : people) {
-                if (currentPerson.getName().equals(name)) {
-                    hasPerson = true;
-                    person = currentPerson;
-                    break;
-                }
-            }
+            Object object = getObject(criteria, tokens);
+            addClassToPerson(person, object);
 
-            switch (tokens[1]) {
-                case "company":
-                    String companyName = tokens[2];
-                    String department = tokens[3];
-                    double salary = Double.parseDouble(tokens[4]);
-                    Company company = new Company(companyName, department, salary);
-                    person.setCompany(company);
-                    break;
-                case "pokemon":
-                    String pokemonName = tokens[2];
-                    String type = tokens[3];
-                    Pokemon pokemon = new Pokemon(pokemonName, type);
-                    List<Pokemon> pokemons = person.getPokemons();
-                    pokemons.add(pokemon);
-                    person.setPokemons(pokemons);
-                    break;
-                case "parents":
-                    String parentName = tokens[2];
-                    String birthday = tokens[3];
-                    Parents parents = new Parents(parentName, birthday);
-                    List<Parents> currentParents = person.getParents();
-                    currentParents.add(parents);
-                    person.setParents(currentParents);
-                    break;
-                case "children":
-                    String childName = tokens[2];
-                    String birthdayChild = tokens[3];
-                    Children children = new Children(childName, birthdayChild);
-                    List<Children> currentChildren = person.getChildren();
-                    currentChildren.add(children);
-                    person.setChildren(currentChildren);
-                    break;
-                case "car":
-                    String carModel = tokens[2];
-                    int speed = Integer.parseInt(tokens[3]);
-                    Car car = new Car(carModel, speed);
-                    person.setCar(car);
-                    break;
-            }
+            personsMap.put(name, person);
 
-            if (!hasPerson) {
-                people.add(person);
-            }
             input = scanner.nextLine();
         }
 
-        //TonchoTonchev
-        //Company:
-        //Car:
-        //Trabant 30
-        //Pokemon:
-        //Electrode Electricity
-        //Parents:
-        //Children:
+        input = scanner.nextLine();
 
-        String targetName = scanner.nextLine();
-        StringBuilder sb = new StringBuilder();
+        System.out.println(personsMap.get(input).toString());
+    }
 
-        for (Person person : people) {
-            if (person.getName().equals(targetName)) {
-                sb.append(person.getName()).append(System.lineSeparator());
-                sb.append("Company:").append(System.lineSeparator());
-                if (person.getCompany() != null) {
-                    sb.append(person.getCompany().toString()).append(System.lineSeparator());
-                }
-                sb.append("Car:").append(System.lineSeparator());
-                if (person.getCar() != null) {
-                    sb.append(person.getCar().toString()).append(System.lineSeparator());
-                }
+    private static void addClassToPerson(Person person, Object object) {
+        String string = object.getClass().toString();
 
-                sb.append("Pokemon:").append(System.lineSeparator());
-                for (Pokemon pokemon : person.getPokemons()) {
-                    sb.append(pokemon.toString()).append(System.lineSeparator());
-                }
-                sb.append("Parents:").append(System.lineSeparator());
-                for (Parents parent : person.getParents()) {
-                    sb.append(parent.toString()).append(System.lineSeparator());
-                }
-                sb.append("Children:").append(System.lineSeparator());
-                for (Children child : person.getChildren()) {
-                    sb.append(child.toString()).append(System.lineSeparator());
-                }
-                System.out.println(sb.toString());
-                break;
+        switch (string) {
+            case "class Company" -> person.setCompany((Company) object);
+            case "class Car" -> person.setCar((Car) object);
+            case "class Pokemon" -> person.getPokemons().add((Pokemon) object);
+            case "class Parent" -> person.getParents().add((Parent) object);
+            case "class Child" -> person.getChildren().add((Child) object);
+        }
+    }
+
+    private static Object getObject(String criteria, String[] tokens) {
+        Object object = null;
+
+        switch (criteria) {
+            case "company" -> {
+                String name = tokens[2];
+                String department = tokens[3];
+                double salary = Double.parseDouble(tokens[4]);
+                object = new Company(name, department, salary);
+            }
+            case "pokemon" -> {
+                String name = tokens[2];
+                String type = tokens[3];
+
+                object = new Pokemon(name, type);
+            }
+            case "parents" -> {
+                String name = tokens[2];
+                String birthday = tokens[3];
+                object = new Parent(name, birthday);
+            }
+            case "children" -> {
+                String name = tokens[2];
+                String birthday = tokens[3];
+                object = new Child(name, birthday);
+            }
+            case "car" -> {
+                String model = tokens[2];
+                int speed = Integer.parseInt(tokens[3]);
+                object = new Car(model, speed);
             }
         }
-
-
+        return object;
     }
 }
-
-
-
-
-
-
 
 

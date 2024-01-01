@@ -1,5 +1,3 @@
-package Google;
-
 public class Car {
     private String model;
     private int speed;
@@ -9,18 +7,26 @@ public class Car {
         this.speed = speed;
     }
 
-    public int getSpeed() {
-        return this.speed;
+    public String getModel() {
+        return model;
     }
 
-    public String getModel() {
-        return this.model;
+    public Car setModel(String model) {
+        this.model = model;
+        return this;
+    }
+
+    public int getSpeed() {
+        return speed;
+    }
+
+    public Car setSpeed(int speed) {
+        this.speed = speed;
+        return this;
     }
 
     @Override
     public String toString() {
-        return this.model + " " + this.speed;
-
+        return String.format("%s %d", getModel(), getSpeed());
     }
 }
-

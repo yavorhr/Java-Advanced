@@ -24,8 +24,7 @@ public class Main {
     private static void printCat(Map<String, Cat> catsMap, String input) {
         Cat currentCat = catsMap.get(input);
         if (currentCat != null) {
-            String breed = currentCat.getClass().getName();
-            System.out.printf("%s %s", breed, currentCat.toString());
+            System.out.println(currentCat.toString());
         }
     }
 

@@ -1,9 +1,7 @@
-package Pockemon;
-
 public class StreetExtraordinaire extends Cat {
 
-    public StreetExtraordinaire(String name, double specialChar) {
-        super(name, specialChar);
+    public StreetExtraordinaire(String name, double meowingDecibels) {
+        super(name, meowingDecibels);
     }
 
     @Override
@@ -11,7 +9,3 @@ public class StreetExtraordinaire extends Cat {
         return "StreetExtraordinaire " + super.toString();
     }
 }
-
-
-
-

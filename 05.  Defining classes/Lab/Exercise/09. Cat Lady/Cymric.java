@@ -1,9 +1,7 @@
-package Pockemon;
+public class Cymric extends Cat {
 
-public class Cymric extends Cat{
-
-    public Cymric(String name, double specialChar) {
-        super(name, specialChar);
+    public Cymric(String name, double furLength) {
+        super(name, furLength);
     }
 
     @Override
@@ -11,7 +9,3 @@ public class Cymric extends Cat{
         return "Cymric " + super.toString();
     }
 }
-
-
-
-

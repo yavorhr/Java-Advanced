@@ -1,9 +1,7 @@
-package Pockemon;
-
 public class Siamese extends Cat {
 
-    public Siamese(String name, double specialChar) {
-        super(name, specialChar);
+    public Siamese(String name, double earSize) {
+        super(name, earSize);
     }
 
     @Override

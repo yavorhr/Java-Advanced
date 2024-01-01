@@ -1,70 +1,105 @@
-package Google;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class Person {
     private String name;
     private Company company;
-    private Car car;
     private List<Pokemon> pokemons;
-    private List<Children> children;
-    private List<Parents> parents;
+    private List<Parent> parents;
+    private List<Child> children;
+    private Car car;
 
     public Person(String name) {
         this.name = name;
-        this.children = new ArrayList<>();
         this.pokemons = new ArrayList<>();
         this.parents = new ArrayList<>();
+        this.children = new ArrayList<>();
     }
 
-    //Getters and Setters
+    public String getName() {
+        return name;
+    }
+
+    public Person setName(String name) {
+        this.name = name;
+        return this;
+    }
 
     public Company getCompany() {
         return company;
     }
 
-    public void setCompany(Company company) {
+    public Person setCompany(Company company) {
         this.company = company;
-    }
-
-    public Car getCar() {
-        return car;
-    }
-
-    public void setCar(Car car) {
-        this.car = car;
+        return this;
     }
 
     public List<Pokemon> getPokemons() {
         return pokemons;
     }
 
-    public void setPokemons(List<Pokemon> pokemons) {
+    public Person setPokemons(List<Pokemon> pokemons) {
         this.pokemons = pokemons;
+        return this;
     }
 
-    public List<Children> getChildren() {
-        return children;
-    }
-
-    public void setChildren(List<Children> children) {
-        this.children = children;
-    }
-
-    public List<Parents> getParents() {
+    public List<Parent> getParents() {
         return parents;
     }
 
-    public void setParents(List<Parents> parents) {
+    public Person setParents(List<Parent> parents) {
         this.parents = parents;
+        return this;
     }
 
-    public String getName(){
-        return this.name;
+    public List<Child> getChildren() {
+        return children;
     }
 
+    public Person setChildren(List<Child> children) {
+        this.children = children;
+        return this;
+    }
 
+    public Car getCar() {
+        return car;
+    }
 
+    public Person setCar(Car car) {
+        this.car = car;
+        return this;
+    }
 
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(getName()).append(System.lineSeparator());
+
+        sb.append("Company:").append(System.lineSeparator());
+        if (getCompany() != null) {
+            sb.append(getCompany().toString()).append(System.lineSeparator());
+        }
+
+        sb.append("Car:").append(System.lineSeparator());
+        if (getCar() != null) {
+            sb.append(getCar().toString()).append(System.lineSeparator());
+        }
+
+        sb.append("Pokemon:").append(System.lineSeparator());
+        if (getPokemons().size() != 0) {
+            getPokemons().forEach(p -> sb.append(p.toString()).append(System.lineSeparator()));
+        }
+
+        sb.append("Parents:").append(System.lineSeparator());
+        if (getParents().size() != 0) {
+            getParents().forEach(p -> sb.append(p.toString()));
+        }
+
+        sb.append("Children:").append(System.lineSeparator());
+        if (getChildren().size() != 0) {
+            getChildren().forEach(p -> sb.append(p.toString()));
+        }
+        return sb.toString();
+    }
 }

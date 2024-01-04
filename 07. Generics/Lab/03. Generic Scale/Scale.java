@@ -1,5 +1,3 @@
-import java.util.Scanner;
-
 public class Scale<E extends Comparable<E>> {
     private E left;
     private E right;
@@ -10,15 +8,15 @@ public class Scale<E extends Comparable<E>> {
     }
 
     public E getHeavier() {
-        int result = this.right.compareTo(this.left);
+        int result = this.left.compareTo(this.right);
         if (result > 0) {
-            return this.right;
+            return this.left;
         }
+
         if (result == 0) {
             return null;
         }
-        return this.left;
 
+        return this.right;
     }
-
 }

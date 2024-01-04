@@ -1,16 +1,23 @@
-import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
 
-        Jar<Integer> jarOne = new Jar<>();
-        Jar<String> jarTwo = new Jar<>();
+        Pickle bulgarianPickle = new Pickle("bulgarian");
+        Pickle americanPickle = new Pickle("american");
 
-        jarOne.add(13);
-        jarTwo.add("String");
+        Jar<Pickle> jarOfPickles = new Jar<>();
+        jarOfPickles.add(bulgarianPickle);
+        jarOfPickles.add(americanPickle);
 
+        int num = 1;
+        int secondNum = 2;
 
+        Jar<Integer> integerJar = new Jar<>();
 
+        integerJar.add(num);
+        integerJar.add(secondNum);
+
+        System.out.println(jarOfPickles.toString());
     }
 }
+

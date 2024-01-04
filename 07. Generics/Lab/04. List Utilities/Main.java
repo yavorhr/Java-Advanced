@@ -1,12 +1,17 @@
-import java.lang.reflect.Array;
 import java.util.List;
-import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
 
-        List <Integer> numbers = List.of(13,14,15);
-        System.out.println(ListUtils.getMin(numbers));
+        List<Integer> integersList = List.of(130, 14, 5123, 321);
+        List<String> stringsList = List.of("z", "d", "c", "y");
+
+        Integer minInt = ListUtils.getMin(integersList);
+        String mintStr = ListUtils.getMin(stringsList);
+
+        System.out.println(minInt);
+        System.out.println(mintStr);
 
     }
 }
+

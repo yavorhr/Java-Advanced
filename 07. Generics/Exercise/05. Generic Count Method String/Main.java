@@ -4,14 +4,26 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        int n = Integer.parseInt(scanner.nextLine());
-        Box<String> box = new Box();
-        for (int i = 0; i < n; i++) {
-            String text = scanner.nextLine();
-            box.add(text);
+        int n = scanner.nextInt();
+        scanner.nextLine();
+
+        Box<String> box = new Box<>();
+
+        while (n > 0) {
+            String input = scanner.nextLine();
+            box.add(input);
+            n--;
         }
-        String elementToCompare = scanner.nextLine();
-        int countGreater = box.countGreaterThan(elementToCompare);
-        System.out.println(countGreater);
+
+        String input = scanner.nextLine();
+        int countElements = box.getGreaterCountOfElements(input);
+
+        printGreaterElementsCount(countElements);
     }
+
+    private static void printGreaterElementsCount(int count) {
+        System.out.println(count);
+    }
+
 }
+

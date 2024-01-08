@@ -2,91 +2,94 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CustomList<T extends Comparable<T>> {
-    private List<T> values;
+    private List<T> arrayList;
 
     public CustomList() {
-        this.values = new ArrayList<>();
+        this.arrayList = new ArrayList<>();
+    }
+
+    public List<T> getArrayList() {
+        return arrayList;
+    }
+
+    public CustomList<T> setArrayList(List<T> arrayList) {
+        this.arrayList = arrayList;
+        return this;
     }
 
     public void add(T element) {
-        this.values.add(element);
+        this.arrayList.add(element);
     }
 
-    public void remove(int index) {
-        if (index < 0 || index >= this.values.size()) {
-            throw new IndexOutOfBoundsException("Invalid index");
-        }
-        this.values.remove(index);
+    public boolean isEmpty() {
+        return this.arrayList.isEmpty();
+    }
+
+    public T remove(int index) {
+        validateIndex(index);
+        return this.arrayList.remove(index);
     }
 
     public boolean contains(T element) {
-        return this.values.contains(element);
+        return this.arrayList.contains(element);
     }
 
     public void swap(int firstIndex, int secondIndex) {
-        validateIndexes(firstIndex, secondIndex);
-        //Collections.swap (indexOne, indexTwo);
-        T firstElement = this.values.get(firstIndex);
-        T secondElement = this.values.get(secondIndex);
-        this.values.set(firstIndex, secondElement);
-        this.values.set(secondIndex, firstElement);
-    }
+        validateIndex(firstIndex);
+        validateIndex(secondIndex);
 
-    private void validateIndexes(int indexOne, int indexTwo) {
-        if (indexOne < 0 || indexOne >= this.values.size()) {
-            throw new IndexOutOfBoundsException("Invalid index");
-        }
+        T firstElement = this.arrayList.get(firstIndex);
+        T secondElement = this.arrayList.get(secondIndex);
 
-        if (indexTwo < 0 || indexTwo >= this.values.size()) {
-            throw new IndexOutOfBoundsException("Invalid index");
-        }
+        this.arrayList.set(firstIndex, secondElement);
+        this.arrayList.set(secondIndex, firstElement);
     }
 
     public int countGreaterThan(T element) {
-        return (int) this.values.stream().filter(e -> e.compareTo(element) > 0).count();
-
+        return (int) this.arrayList.stream().filter(e -> e.compareTo(element) > 0).count();
     }
 
     public T getMax() {
-        //Collections.max(this.list)
-        if (this.values.isEmpty()) {
-            throw new IllegalStateException("Empty list!!!");
+        if (this.isEmpty()) {
+            throw new IllegalStateException("Collection is empty!");
         }
 
-        T maxElement = this.values.get(0);
-        for (int i = 0; i < this.values.size(); i++) {
-            T currentE = this.values.get(i);
-            if (currentE.compareTo(maxElement) > 0) {
-                maxElement = currentE;
+        T maxElement = this.arrayList.get(0);
+
+        for (T element : this.arrayList) {
+            if (element.compareTo(maxElement) > 0) {
+                maxElement = element;
             }
         }
         return maxElement;
     }
 
     public T getMin() {
-        if (this.values.isEmpty()) {
-            throw new IllegalStateException("Empty list!!!");
+        if (this.isEmpty()) {
+            throw new IllegalStateException("Collection is empty!");
         }
 
-        T minElement = this.values.get(0);
-        for (int i = 0; i < this.values.size(); i++) {
-            T currentE = this.values.get(i);
-            if (currentE.compareTo(minElement) < 0) {
-                minElement = currentE;
+        T minElement = this.arrayList.get(0);
+
+        for (T element : this.arrayList) {
+            if (element.compareTo(minElement) < 0) {
+                minElement = element;
             }
         }
         return minElement;
     }
 
+    private void validateIndex(int index) {
+        if (index < 0 || index >= this.arrayList.size()) {
+            throw new IndexOutOfBoundsException("Index " + index + " is out of bound exception!");
+        }
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        for (T element : this.values) {
-            sb.append(element).append(System.lineSeparator());
-        }
-        return sb.toString().trim();
+        this.arrayList.forEach(System.out::println);
+
+        return sb.toString();
     }
 }
-
-
-

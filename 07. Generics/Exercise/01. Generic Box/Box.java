@@ -2,24 +2,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Box<T> {
-    private List<T> values;
+    private List<T> elements;
 
     public Box() {
-        this.values = new ArrayList<>();
+        this.elements = new ArrayList<>();
     }
 
     public void add(T element) {
-        this.values.add(element);
+        this.elements.add(element);
+    }
+
+    public List<T> getElements() {
+        return elements;
+    }
+
+    public Box<T> setElements(List<T> elements) {
+        this.elements = elements;
+        return this;
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        for (T value : this.values) {
-            sb.append(String.format("%s: %s", value.getClass().getName(), value)).append(System.lineSeparator());
-        }
+        getElements().forEach(e -> sb.append(String.format("%s: %s\n", e.getClass(), e)));
         return sb.toString();
     }
 }
-
-

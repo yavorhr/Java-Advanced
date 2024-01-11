@@ -7,8 +7,16 @@ public class Library implements Iterable<Book> {
         this.books = books;
     }
 
-    private class LibIterator implements Iterator<Book> {
-        private int index = 0;
+    public void setBooks(Book[] books) {
+        this.books = books;
+    }
+
+    public Book[] getBooks() {
+        return books;
+    }
+
+    private final class LibIterator implements Iterator<Book> {
+        private int index;
 
         public LibIterator() {
             this.index = 0;
@@ -29,7 +37,6 @@ public class Library implements Iterable<Book> {
 
     @Override
     public Iterator<Book> iterator() {
-        return new LibIterator() {
-        };
+        return new LibIterator();
     }
 }

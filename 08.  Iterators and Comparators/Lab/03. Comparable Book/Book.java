@@ -6,41 +6,50 @@ public class Book implements Comparable<Book> {
     private int year;
     private List<String> authors;
 
-    public Book(String title, int year, String... authors) {
-        this.title = title;
-        this.year = year;
-        this.authors = Arrays.asList(authors);
+    public Book(String title, int year, String... strings) {
+        setTitle(title);
+        setYear(year);
+        setAuthors(Arrays.asList(strings));
+    }
+
+    public List<String> getAuthors() {
+        return authors;
     }
 
     public String getTitle() {
-        return this.title;
+        return title;
     }
 
-    private void setYear(int year) {
-        this.year = year;
-    }
-
-    public void setAuthors(String... authors) {
-        this.authors = Arrays.asList(authors);
+    public int getYear() {
+        return year;
     }
 
     private void setTitle(String title) {
         this.title = title;
     }
 
-    public int getYear() {
-        return this.year;
+    private void setYear(int year) {
+        this.year = year;
     }
 
-    public List<String> getAuthors() {
-        return this.authors;
+    private void setAuthors(List<String> authors) {
+        this.authors = authors;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s, %d, %s", this.title, this.year, getAuthorsToString(this.authors));
+    }
+
+    private String getAuthorsToString(List<String> authors) {
+        return String.join(", ", authors);
     }
 
     @Override
     public int compareTo(Book otherBook) {
-        int result = this.getTitle().compareTo(otherBook.getTitle());
-        if (result==0) {
-            result = Integer.compare(this.year,otherBook.year);
+        int result = this.title.compareTo(otherBook.title);
+        if (result == 0) {
+            result = Integer.compare(this.year, otherBook.year);
         }
         return result;
     }

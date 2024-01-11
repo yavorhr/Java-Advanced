@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -7,33 +6,42 @@ public class Book {
     private int year;
     private List<String> authors;
 
-    public Book(String title, int year, String... authors) {
-        this.title = title;
-        this.year = year;
-        this.authors = Arrays.asList(authors);
+    public Book(String title, int year, String... strings) {
+        setTitle(title);
+        setYear(year);
+        setAuthors(Arrays.asList(strings));
     }
 
-    private void setYear(int year) {
-        this.year = year;
+    public List<String> getAuthors() {
+        return authors;
     }
 
-    public void setAuthors(String... authors) {
-        this.authors = Arrays.asList(authors);
+    public String getTitle() {
+        return title;
+    }
+
+    public int getYear() {
+        return year;
     }
 
     private void setTitle(String title) {
         this.title = title;
     }
 
-    public int getYear() {
-        return this.year;
+    private void setYear(int year) {
+        this.year = year;
     }
 
-    public List<String> getAuthors() {
-        return this.authors;
+    private void setAuthors(List<String> authors) {
+        this.authors = authors;
     }
 
-    public String getTitle() {
-        return this.title;
+    @Override
+    public String toString() {
+        return String.format("%s, %d, %s", this.title, this.year, getAuthorsToString(this.authors));
+    }
+
+    private String getAuthorsToString(List<String> authors) {
+        return String.join(", ", authors);
     }
 }

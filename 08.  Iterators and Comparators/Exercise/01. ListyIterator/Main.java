@@ -1,31 +1,42 @@
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Scanner;
 import java.util.stream.Collectors;
 
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        List<String> data = Arrays.stream(scanner.nextLine().split("\\s+")).skip(1)
-                .collect(Collectors.toCollection(ArrayList::new));
 
-        ListyIterator listyIterator = new ListyIterator(data);
-        String command = scanner.nextLine();
-        while (!"END".equals(command)) {
+        ListIterator listIterator = null;
+
+        String input = scanner.nextLine();
+        while (!"END".equals(input)) {
+            String[] tokens = input.split(" ");
+
+            String command = tokens[0];
             switch (command) {
-                case "Create":
-                    break;
-                case "Move":
-                    System.out.println(listyIterator.move());
-                    break;
-                case "Print":
-                    System.out.println(listyIterator.print());
-                    break;
-                case "HasNext":
-                    System.out.println(listyIterator.hasNext());
-                    break;
+                case "Create" -> {
+                    if (tokens.length == 1) {
+                        listIterator = new ListIterator();
+                    } else {
+                        List<String> names = Arrays.stream(tokens).skip(1).collect(Collectors.toList());
+                        listIterator = new ListIterator(names);
+                    }
+                }
+                case "Move" -> System.out.println(listIterator.move());
+
+                case "HasNext" -> System.out.println(listIterator.hasNext());
+
+                case "Print" -> System.out.println(listIterator.print());
+
             }
-            command = scanner.nextLine();
+            input = scanner.nextLine();
         }
+
     }
+
 }
+
 
 

@@ -5,33 +5,50 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
 
         List<Person> people = new ArrayList<>();
+
         String input = scanner.nextLine();
-        while (!input.equals("END")) {
-            String[] info = input.split("\\s+");
-            String name = info[0];
-            int age = Integer.parseInt(info[1]);
-            String town = info[2];
-            Person person = new Person(name, age, town);
-            people.add(person);
+        while (!"END".equals(input)) {
+            String[] tokens = input.split(" ");
+
+            addPerson(people, tokens);
             input = scanner.nextLine();
         }
 
-        int n = Integer.parseInt(scanner.nextLine());
-        Person personForCompare = people.get(n - 1);
+        int nthPerson = Integer.parseInt(scanner.nextLine());
+        Person personToCompare = people.get(nthPerson - 1);
 
-        int countEqual = 0;
-        for (Person person : people) {
-            if (personForCompare.compareTo(person) == 0) {
-                countEqual++;
-            }
-        }
+        int equalPersonsCount = getEqualPersonsCount(people, personToCompare);
 
-        if (countEqual == 0) {
+        printResult(people, equalPersonsCount);
+    }
+
+    private static void printResult(List<Person> people, int equalPersonsCount) {
+        if (equalPersonsCount == 0) {
             System.out.println("No matches");
         } else {
-            System.out.println(countEqual + " " + (people.size()  - countEqual) + " " +people.size());
+            System.out.printf("%d %d %d", equalPersonsCount, people.size() - equalPersonsCount, people.size());
         }
     }
+
+    private static int getEqualPersonsCount(List<Person> people, Person personToCompare) {
+        int equalPersonsCount = 0;
+
+        for (Person currentPerson : people) {
+            if (currentPerson != personToCompare && currentPerson.compareTo(personToCompare) == 0) {
+                equalPersonsCount += 2;
+            }
+        }
+        return equalPersonsCount;
+    }
+
+    private static void addPerson(List<Person> people, String[] tokens) {
+        String name = tokens[0];
+        int age = Integer.parseInt(tokens[1]);
+        String town = tokens[2];
+
+        people.add(new Person(name, age, town));
+    }
 }
+
 
 

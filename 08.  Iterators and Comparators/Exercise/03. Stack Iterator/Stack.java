@@ -1,6 +1,7 @@
+import java.util.Iterator;
 import java.util.function.Consumer;
 
-public class Stack {
+public class Stack implements Iterable<Integer> {
     private Node top;
     private int size;
 
@@ -55,6 +56,24 @@ public class Stack {
     public int peak() {
         ensureNonEmpty();
         return this.top.element;
+    }
+
+    private class StackIterator implements Iterator<Integer> {
+
+        @Override
+        public boolean hasNext() {
+            return top.prev != null;
+        }
+
+        @Override
+        public Integer next() {
+            return pop();
+        }
+    }
+
+    @Override
+    public Iterator<Integer> iterator() {
+        return new StackIterator();
     }
 
 //    public void forEach(Consumer<Integer> consumer) {

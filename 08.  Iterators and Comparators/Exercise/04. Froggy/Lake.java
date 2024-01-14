@@ -1,34 +1,49 @@
 import java.util.Iterator;
 
 public class Lake implements Iterable<Integer> {
-    private int[] stonesNumbers;
+    private int[] numbers;
 
-    public Lake(int[] stonesNumbers) {
-        this.stonesNumbers = stonesNumbers;
+    public Lake(int[] numbers) {
+        this.numbers = numbers;
+    }
+
+    public int[] getNumbers() {
+        return numbers;
+    }
+
+    public Lake setNumbers(int[] numbers) {
+        this.numbers = numbers;
+        return this;
+    }
+
+    private class Frog implements Iterator<Integer> {
+        private int index;
+
+        public Frog() {
+            this.index = 0;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return this.index < numbers.length;
+        }
+
+        @Override
+        public Integer next() {
+            int lastEvenIndex = numbers.length % 2 == 0 ? numbers.length - 2 : numbers.length - 1;
+            if (this.index == lastEvenIndex) {
+                int element = numbers[lastEvenIndex];
+                this.index = 1;
+                return element;
+            }
+            int element = numbers[this.index];
+            this.index += 2;
+            return element;
+        }
     }
 
     @Override
     public Iterator<Integer> iterator() {
-        return new Iterator<Integer>() {
-            private int index = 0;
-            private int lastEvenIndex = stonesNumbers.length % 2 == 0 ? stonesNumbers.length - 2 : stonesNumbers.length - 1;
-
-            @Override
-            public boolean hasNext() {
-                return this.index < stonesNumbers.length;
-            }
-
-            @Override
-            public Integer next() {
-                if (this.index == lastEvenIndex) {
-                    int element = stonesNumbers[lastEvenIndex];
-                    this.index = 1;
-                    return element;
-                }
-                int element = stonesNumbers[index];
-                this.index += 2;
-                return element;
-            }
-        };
+        return new Frog();
     }
 }

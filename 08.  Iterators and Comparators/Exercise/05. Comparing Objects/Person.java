@@ -9,16 +9,44 @@ public class Person implements Comparable<Person> {
         this.town = town;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public Person setName(String name) {
+        this.name = name;
+        return this;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public Person setAge(int age) {
+        this.age = age;
+        return this;
+    }
+
+    public String getTown() {
+        return town;
+    }
+
+    public Person setTown(String town) {
+        this.town = town;
+        return this;
+    }
 
     @Override
-    public int compareTo(Person otherPerson) {
-        int result = this.name.compareTo(otherPerson.name);
+    public int compareTo(Person other) {
+        int result = this.name.compareTo(other.name);
         if (result == 0) {
-            result = Integer.compare(this.age, otherPerson.age);
-            if (result == 0) {
-                result = this.town.compareTo(otherPerson.town);
-            }
+            result = Integer.compare(this.age, other.age);
         }
+
+        if (result == 0) {
+            result = this.town.compareTo(other.town);
+        }
+
         return result;
     }
 }

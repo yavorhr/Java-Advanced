@@ -6,14 +6,20 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        List<Integer> numbers = Arrays.stream(scanner.nextLine().split("\\s+")).mapToInt(Integer::parseInt).boxed().collect(Collectors.toList());
+        List<Integer> listIntegers = Arrays.stream(scanner.nextLine()
+                .split("\\s+"))
+                .mapToInt(Integer::parseInt)
+                .boxed()
+                .collect(Collectors.toList());
 
-        Function<List<Integer>, Integer> findMin = list -> {
-            int min = Collections.min(list);
-            return list.lastIndexOf(min);
+        Function<List<Integer>, Integer> findMinNumber = list -> {
+            int minNumber = Collections.min(list);
+            return list.lastIndexOf(minNumber);
         };
 
-        System.out.println(findMin.apply(numbers));
+        int indexMinNumber = findMinNumber.apply(listIntegers);
+
+        System.out.println(indexMinNumber);
     }
 }
 

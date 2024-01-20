@@ -1,26 +1,31 @@
 import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        int[] nums = Arrays.stream(scanner.nextLine().split(", "))
-                .mapToInt(Integer::parseInt)
-                .toArray();
+        String input = scanner.nextLine();
 
-        Function<int[], String> getCount = arr -> String.format("Count = %d", arr.length);
-        System.out.println(getCount.apply(nums));
+        Function<String, int[]> parserFunc = s ->
+                Arrays.stream(s
+                        .split(", "))
+                        .mapToInt(Integer::parseInt)
+                        .toArray();
 
-        Function<int[], String> sumNumbers = arr -> {
-            return "Sum = " + Arrays.stream(arr).sum();
-        };
+        int[] arrayNumbers = parserFunc.apply(input);
+        printResult("Count = %d\n", arrayNumbers.length);
 
-        System.out.println(sumNumbers.apply(nums));
+        Function<int[], Integer> getSumFunc = array -> Arrays.stream(array).sum();
+        int sumArr = getSumFunc.apply(arrayNumbers);
+
+        printResult("Sum = %d\n", sumArr);
+    }
+
+    private static void printResult(String s2, int length) {
+        System.out.printf(s2, length);
     }
 }
-
-
-
 
 

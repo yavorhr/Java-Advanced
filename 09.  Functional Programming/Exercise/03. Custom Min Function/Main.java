@@ -5,13 +5,22 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        Function<int[], Integer> findSmallest = arrIntegers ->
-                Arrays.stream(arrIntegers)
-                        .min()
-                        .getAsInt();
+        int[] numbersInput = Arrays.stream(scanner.nextLine()
+                .split(" "))
+                .mapToInt(Integer::parseInt)
+                .toArray();
 
-        int[] numbers = Arrays.stream(scanner.nextLine().split("\\s+")).mapToInt(Integer::parseInt).toArray();
-        System.out.println(findSmallest.apply(numbers));
+        Function<int[], Integer> findSmallestIntFunc =
+                arr -> Arrays.stream(arr)
+                        .min()
+                        .orElse(0);
+
+        int minNumber = findSmallestIntFunc.apply(numbersInput);
+
+        System.out.println(minNumber);
     }
 }
+
+
+
 

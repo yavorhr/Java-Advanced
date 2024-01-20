@@ -1,18 +1,28 @@
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        List<String> wordsWithUpperCase = Arrays.stream(scanner.nextLine().split("\\s+"))
-                .filter(w -> Character.isUpperCase(w.charAt(0)))
-                .collect(Collectors.toList());
+        String input = scanner.nextLine();
 
-        System.out.println(wordsWithUpperCase.size());
+        Predicate<String> filterByUppercase = s -> Character.isUpperCase(s.charAt(0));
 
-        System.out.println(wordsWithUpperCase.stream()
-                .collect(Collectors.joining(System.lineSeparator())));
+        String[] arr = Arrays.stream(input
+                .split(" "))
+                .filter(filterByUppercase)
+                .toArray(String[]::new);
+
+        printOutput(arr);
+    }
+
+    private static void printOutput(String[] arr) {
+        System.out.println(arr.length);
+        System.out.println(Arrays.stream(arr).collect(Collectors.joining(System.lineSeparator())));
     }
 }
+
+
 

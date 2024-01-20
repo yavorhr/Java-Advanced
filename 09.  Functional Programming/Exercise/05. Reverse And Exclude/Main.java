@@ -7,21 +7,31 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        List<Integer> numbers = Arrays.stream(scanner.nextLine().split("\\s+"))
+        List<Integer> listIntegers = Arrays.stream(scanner.nextLine()
+                .split(" "))
                 .mapToInt(Integer::parseInt)
                 .boxed()
                 .collect(Collectors.toList());
 
-        int n = Integer.parseInt(scanner.nextLine());
+        Collections.reverse(listIntegers);
 
-        Predicate<Integer> predicate = number -> number % n == 0;
+        int number = Integer.parseInt(scanner.nextLine());
 
-        numbers.removeIf(predicate);
-        Collections.reverse(numbers);
+        removeDivisibleNumbersFromList(listIntegers, number);
+        printList(listIntegers);
+    }
 
-        Consumer<List<Integer>> printer = list -> list.forEach(e -> System.out.print(e + " "));
-        printer.accept(numbers);
+    private static void printList(List<Integer> listIntegers) {
+        Consumer<List<Integer>> printer = list -> list.forEach(n -> System.out.print(n + " "));
+        printer.accept(listIntegers);
+    }
+
+    private static void removeDivisibleNumbersFromList(List<Integer> listIntegers, int number) {
+        Predicate<Integer> dividedByCustomNumber = num -> num % number == 0;
+        listIntegers.removeIf(dividedByCustomNumber);
     }
 }
+
+
 
 

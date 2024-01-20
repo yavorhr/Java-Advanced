@@ -5,13 +5,19 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        String[] nameList = scanner.nextLine().split("\\s+");
+        String[] input = Arrays.stream(scanner.nextLine()
+                .split(" "))
+                .toArray(String[]::new);
 
-        Consumer<String[]> consumerPrint = stringArr -> {
-            for (String name : stringArr) {
-                System.out.printf("Sir %s%n", name);
-            }
-        };
-        consumerPrint.accept(nameList);
+        Consumer<String[]> consumerPrint =
+                arr -> Arrays.stream(arr)
+                        .forEach(s -> System.out.printf("Sir %s\n", s));
+
+        consumerPrint.accept(input);
+
     }
 }
+
+
+
+

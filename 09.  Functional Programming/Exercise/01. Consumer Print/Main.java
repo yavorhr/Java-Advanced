@@ -1,14 +1,22 @@
 import java.util.*;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        List<String> wordsNames = Arrays.stream(scanner.nextLine().split("\\s+")).collect(Collectors.toList());
-        Consumer<List<String>> consumerPrint = printList -> wordsNames.forEach(System.out::println);
+        String[] input = Arrays.stream(scanner.nextLine()
+                .split(" "))
+                .toArray(String[]::new);
 
-        consumerPrint.accept(wordsNames);
+        Consumer<String[]> printer =
+                arr -> Arrays.stream(arr)
+                        .forEach(System.out::println);
+
+        printer.accept(input);
     }
 }
+
+
+
+

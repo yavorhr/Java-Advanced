@@ -1,113 +1,153 @@
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
-
         Scanner scanner = new Scanner(System.in);
 
-        int lettuce = 0;
-        int potatoes = 0;
-        int carrots = 0;
-        int harmedVeggies = 0;
+        int rows = scanner.nextInt();
+        scanner.nextLine();
 
-        int rows = Integer.parseInt(scanner.nextLine());
-        char[][] matrix = new char[rows][];
-        for (int row = 0; row < rows; row++) {
-            matrix[row] = scanner.nextLine().replaceAll("\\s+", "").toCharArray();
-        }
+        Map<Character, Integer> countOutputs = getHarvestVeggiesOutput();
+        char[][] matrix = readMatrix(scanner, rows);
 
-        String commands = scanner.nextLine();
-        while (!("End of Harvest").equals(commands)) {
-            String[] tokens = commands.split("\\s+");
-            String currentCommand = tokens[0];
+        String input = scanner.nextLine();
+        while (!"End of Harvest".equals(input)) {
+            String[] tokens = input.split(" ");
+            String command = tokens[0];
             int row = Integer.parseInt(tokens[1]);
             int col = Integer.parseInt(tokens[2]);
 
-            if (currentCommand.equals("Harvest")) {
-                if (inBounds(row, col, matrix)) {
-                    if (matrix[row][col] == 'L') {
-                        lettuce++;
-                    } else if (matrix[row][col] == 'C') {
-                        carrots++;
-                    } else if (matrix[row][col] == 'P') {
-                        potatoes++;
+            switch (command) {
+                case "Harvest" -> {
+                    if (isInBounds(row, col, matrix) && matrix[row][col] != ' ') {
+                        countOutputChars(countOutputs, matrix, row, col);
                     }
-                    matrix[row][col] = ' ';
                 }
+                case "Mole" -> {
+                    String direction = tokens[3];
 
-            } else if (currentCommand.equals("Mole")) {
-                String direction = tokens[3];
-                switch (direction) {
-                    case "up":
-                        if (inBounds(row, col, matrix)) {
-                            for (int i = row; i >= 0; i -= 2) {
-                                if (matrix[i][col] != ' ') {
-                                    harmedVeggies++;
-                                    matrix[i][col] = ' ';
-                                }
-                            }
+                    if (isInBounds(row, col, matrix)) {
+                        switch (direction) {
+                            case "up" -> moveUp(matrix, row, col, countOutputs);
+                            case "down" -> moveDown(matrix, row, col, countOutputs);
+                            case "right" -> moveRight(matrix, row, col, countOutputs);
+                            case "left" -> moveLeft(matrix, row, col, countOutputs);
                         }
-                        break;
-                    case "down":
-                        if (inBounds(row, col, matrix)) {
-                            for (int i = row; i <= matrix.length - 1; i += 2) {
-                                if (matrix[i][col] != ' ') {
-                                    harmedVeggies++;
-                                    matrix[i][col] = ' ';
-                                }
-                            }
-                        }
-                        break;
-                    case "left":
-                        if (inBounds(row, col, matrix)) {
-                            for (int i = col; i >= 0; i -= 2) {
-                                if (matrix[row][i] != ' ') {
-                                    harmedVeggies++;
-                                    matrix[row][i] = ' ';
-                                }
-                            }
-                        }
-                        break;
-                    case "right":
-                        if (inBounds(row, col, matrix)) {
-                            for (int i = col; i <= matrix[row].length - 1; i += 2) {
-                                if (matrix[row][i] != ' ') {
-                                    harmedVeggies++;
-                                    matrix[row][i] = ' ';
-                                }
-                            }
-                        }
-                        break;
+                    }
                 }
             }
-            commands = scanner.nextLine();
+            input = scanner.nextLine();
         }
-
-        printMatrix(matrix);
-        System.out.println(String.format("Carrots: %d", carrots));
-        System.out.println(String.format("Potatoes: %d", potatoes));
-        System.out.println(String.format("Lettuce: %d", lettuce));
-        System.out.println(String.format("Harmed vegetables: %d", harmedVeggies));
+        printOutput(matrix, countOutputs);
     }
 
-    private static boolean inBounds(int row, int col, char[][] matrix) {
-        return row >= 0 && row <= matrix.length - 1 && col >= 0 && col <= matrix[row].length - 1;
+    private static Map<Character, Integer> getHarvestVeggiesOutput() {
+        Map<Character, Integer> countOutputs = new LinkedHashMap<>();
+        countOutputs.put('C', 0);
+        countOutputs.put('P', 0);
+        countOutputs.put('L', 0);
+        countOutputs.put(' ', 0);
+        return countOutputs;
     }
 
-    private static void printMatrix(char[][] matrix) {
-        for (int row = 0; row < matrix.length; row++) {
-            for (int col = 0; col < matrix[row].length; col++) {
-                System.out.print(matrix[row][col] + " ");
+    private static void printOutput(char[][] matrix, Map<Character, Integer> countOutputs) {
+        countOutputs.forEach((key, value) ->
+                System.out.printf("%s: %d\n",
+                        getVeggieAsString(key), value));
+
+        for (char[] chars : matrix) {
+            for (char currentChar : chars) {
+                System.out.print(currentChar + " ");
             }
             System.out.println();
         }
+    }
 
+    private static String getVeggieAsString(Character key) {
+        String veggie = "";
 
+        if (key.equals('L')) {
+            veggie = "Lettuce";
+        } else if (key.equals('C')) {
+            veggie = "Carrots";
+        } else if (key.equals('P')) {
+            veggie = "Potatoes";
+        } else {
+            veggie = "Harmed vegetables";
+        }
+        return veggie;
+    }
+
+    private static void moveLeft(char[][] matrix, int row, int col, Map<Character, Integer> countOutputs) {
+        for (int i = col; i >= 0; i -= 2) {
+            char currentCHar = matrix[row][i];
+
+            if (currentCHar != ' ') {
+                matrix[row][i] = ' ';
+                countOutputChars(countOutputs, matrix, row, col);
+            }
+        }
+    }
+
+    private static void moveRight(char[][] matrix, int row, int col, Map<Character, Integer> countOutputs) {
+        for (int i = col; i < matrix[row].length; i += 2) {
+            char currentCHar = matrix[row][i];
+
+            if (currentCHar != ' ') {
+                matrix[row][i] = ' ';
+                countOutputChars(countOutputs, matrix, row, col);
+            }
+        }
+    }
+
+    private static void moveDown(char[][] matrix, int row, int col, Map<Character, Integer> countOutputs) {
+        for (int i = row; i < matrix.length; i += 2) {
+            char currentCHar = matrix[i][col];
+
+            if (currentCHar != ' ') {
+                matrix[i][col] = ' ';
+                countOutputChars(countOutputs, matrix, row, col);
+            }
+        }
+    }
+
+    private static void moveUp(char[][] matrix, int row, int col, Map<Character, Integer> countOutputs) {
+        for (int i = row; i >= 0; i -= 2) {
+            char currentCHar = matrix[i][col];
+
+            if (currentCHar != ' ') {
+                matrix[i][col] = ' ';
+                countOutputChars(countOutputs, matrix, row, col);
+            }
+        }
+    }
+
+    private static char[][] readMatrix(Scanner scanner, int rows) {
+        char[][] matrix = new char[rows][];
+
+        for (int i = 0; i < matrix.length; i++) {
+            char[] col = scanner.nextLine()
+                    .replaceAll("\\s+", "")
+                    .toCharArray();
+
+            matrix[i] = col;
+        }
+        return matrix;
+    }
+
+    private static void countOutputChars(Map<Character, Integer> counterMap, char[][] matrix, int row, int col) {
+        char currentVeggieChar = matrix[row][col];
+        int increaseCount = counterMap.get(currentVeggieChar) + 1;
+        counterMap.put(currentVeggieChar, increaseCount);
+
+        matrix[row][col] = ' ';
+    }
+
+    private static boolean isInBounds(int row, int col, char[][] matrix) {
+        return row >= 0 && row < matrix.length
+                && col >= 0 && col < matrix[row].length;
     }
 }
-
-
-
 
 
 

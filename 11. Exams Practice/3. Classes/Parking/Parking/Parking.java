@@ -1,10 +1,11 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Parking {
-    private List<Car> data;
     private String type;
     private int capacity;
+    private List<Car> data;
 
     public Parking(String type, int capacity) {
         this.type = type;
@@ -15,37 +16,27 @@ public class Parking {
     public void add(Car car) {
         if (this.capacity > this.data.size()) {
             this.data.add(car);
-
         }
     }
 
     public boolean remove(String manufacturer, String model) {
-        for (Car car : data) {
-            if (car.getManufacturer().equals(manufacturer) && car.getModel().equals(model)) {
-                data.remove(car);
-                return true;
-            }
-        }
-        return false;
+        return this.data.removeIf(c -> c.getManufacturer().equals(manufacturer) && c.getModel().equals(model));
     }
 
     public Car getLatestCar() {
-        Car result = null;
-        for (Car car : data) {
-            if (result == null || result.getYear() < car.getYear()) {
-                result = car;
-            }
-        }
-        return result;
+        return this.data.stream()
+                .sorted((f, s) ->
+                        Integer.compare(s.getYear(), f.getYear()))
+                .collect(Collectors.toList())
+                .get(0);
     }
 
     public Car getCar(String manufacturer, String model) {
-        for (Car car : data) {
-            if (car.getManufacturer().equals("manufacturer") && car.getModel().equals("model")) {
-                return car;
-            }
-        }
-        return null;
+        return this.data.stream().
+                filter(c ->
+                        c.getManufacturer().equals(manufacturer) && c.getModel().equals(model))
+                .collect(Collectors.toList())
+                .get(0);
     }
 
     public int getCount() {
@@ -53,11 +44,9 @@ public class Parking {
     }
 
     public String getStatistics() {
-        StringBuilder out = new StringBuilder();
-        out.append(String.format("The cars are parked in %s:%n",this.type));
-        for (Car car : data) {
-            out.append(car.toString()).append(System.lineSeparator());
-        }
-        return out.toString().trim();
+        StringBuilder sb = new StringBuilder(String.format("The cars are parked in %s:\n", this.type));
+
+        this.data.forEach(c -> sb.append(c.toString()).append(System.lineSeparator()));
+        return sb.toString();
     }
 }

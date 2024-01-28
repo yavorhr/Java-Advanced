@@ -1,4 +1,3 @@
-
 public class Player {
     private String name;
     private String clazz;
@@ -24,20 +23,18 @@ public class Player {
         return rank;
     }
 
-    public void setRank(String rank) {
+    public Player setRank(String rank) {
         this.rank = rank;
+        return this;
+    }
+
+    public Player setDescription(String description) {
+        this.description = description;
+        return this;
     }
 
     @Override
     public String toString() {
-        StringBuilder result = new StringBuilder();
-        result.append(String.format("Player %s: %s%n", this.name, this.clazz));
-        result.append(String.format("Rank: %s%n", this.rank));
-        result.append(String.format("Description: %s", this.description));
-        return result.toString().trim();
-    }
-
-    public void setDescription(String discription) {
-        this.description = discription;
+        return String.format("Player %s:\n%s Rank: %s\nDescription: %s" , this.name, this.clazz, this.rank, this.description);
     }
 }

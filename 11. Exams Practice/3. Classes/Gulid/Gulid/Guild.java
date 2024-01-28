@@ -1,78 +1,74 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Guild {
-    private List<Player> roster;
     private String name;
+    private List<Player> roster;
     private int capacity;
 
     public Guild(String name, int capacity) {
         this.name = name;
         this.capacity = capacity;
-        roster = new ArrayList<>();
+        this.roster = new ArrayList<>();
     }
 
     public void addPlayer(Player player) {
-        if (this.roster.size() < this.capacity) {
+        if (this.capacity > this.roster.size()) {
             this.roster.add(player);
         }
+    }
+
+    public boolean removePlayer(String name) {
+        return this.roster.removeIf(p -> p.getName().equals(name));
+    }
+
+    public void promotePlayer(String name) {
+        Player player = findPlayerByName(name);
+        try {
+            if (!player.getRank().equals("Member")) {
+                player.setRank("Member");
+            }
+        } catch (NullPointerException e) {
+            System.out.print("Such player does not exist!");
+        }
+    }
+
+    public void demotePlayer(String name) {
+        Player player = findPlayerByName(name);
+        try {
+            if (!player.getRank().equals("Trial")) {
+                player.setRank("Trial");
+            }
+        } catch (NullPointerException e) {
+            System.out.print("Such player does not exist!");
+        }
+    }
+
+    public Player[] kickPlayersByClass(String clazz) {
+
+        Player[] players = this.roster
+                .stream()
+                .filter(p -> p.getClazz().equals(clazz))
+                .collect(Collectors.toList())
+                .toArray(Player[]::new);
+
+        this.roster.removeIf(p -> p.getClazz().equals(clazz));
+
+        return players;
     }
 
     public int count() {
         return this.roster.size();
     }
 
-    public boolean removePlayer(String name) {
-        for (Player player : this.roster) {
-            if (player.getName().equals(name)) {
-                roster.remove(player);
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public void promotePlayer(String player) {
-        for (Player currentPlayer : roster) {
-            if (currentPlayer.getName().equals(player)) {
-                currentPlayer.setRank("Member");
-                break;
-            }
-        }
-    }
-
-    public void demotePlayer(String player) {
-        for (Player currentPlayer : roster) {
-            if (currentPlayer.getName().equals(player)) {
-                currentPlayer.setRank("Trial");
-                break;
-            }
-        }
-    }
-
-    public Player[] kickPlayersByClass(String givenClass) {
-        Player[] players = this.roster.stream().filter(p -> p.getClazz().equals(givenClass)).toArray(Player[]::new);
-
-        this.roster.removeIf(player -> player.getClazz().equals(givenClass));
-
-        return players;
-
-
-    }
-
     public String report() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Players in the guild: ")
-                .append(this.name).append(":")
-                .append(System.lineSeparator());
-
-        for (Player player : roster) {
-           sb.append(player.toString())
-            .append(System.lineSeparator());
-        }
-     return sb.toString().trim();
+        StringBuilder sb = new StringBuilder(String.format("Players in the guild: %s:\n", this.name));
+        this.roster.forEach(p -> sb.append(p).append(System.lineSeparator()));
+        return sb.toString().trim();
     }
 
+    private Player findPlayerByName(String name) {
+        return roster.stream().filter(p -> p.getName().equals(name)).collect(Collectors.toList()).get(0);
+    }
 }
-
-

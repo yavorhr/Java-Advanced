@@ -3,7 +3,6 @@ public class Car {
     private String model;
     private int year;
 
-
     public Car(String manufacturer, String model, int year) {
         this.manufacturer = manufacturer;
         this.model = model;
@@ -11,31 +10,19 @@ public class Car {
     }
 
     public String getManufacturer() {
-        return this.manufacturer;
+        return manufacturer;
     }
 
     public String getModel() {
-        return this.model;
+        return model;
     }
 
     public int getYear() {
-        return this.year;
-    }
-
-    public void setManufacturer(String manufacturer) {
-        this.manufacturer = manufacturer;
-    }
-
-    public void setModel(String model) {
-        this.model = model;
-    }
-
-    public void setYear(int year) {
-        this.year = year;
+        return year;
     }
 
     @Override
     public String toString() {
-        return String.format("%s %s %d", this.manufacturer, this.model, this.year);
+        return String.format("%s %s (%d)", this.manufacturer, this.model, this.year);
     }
 }

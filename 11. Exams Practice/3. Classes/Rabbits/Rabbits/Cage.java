@@ -1,10 +1,11 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Cage {
-    private List<Rabbit> data;
     private String name;
     private int capacity;
+    private List<Rabbit> data;
 
     public Cage(String name, int capacity) {
         this.name = name;
@@ -13,11 +14,11 @@ public class Cage {
     }
 
     public String getName() {
-        return this.name;
+        return name;
     }
 
     public int getCapacity() {
-        return this.capacity;
+        return capacity;
     }
 
     public void add(Rabbit rabbit) {
@@ -26,37 +27,24 @@ public class Cage {
         }
     }
 
-    public boolean removeRabbit(String name) {
-        for (int i = 0; i < this.data.size(); i++) {
-            if (this.data.get(i).getName().equals(name)) {
-                this.data.remove(i);
-                return true;
-            }
-        }
-        return false;
+    public int count() {
+        return this.data.size();
     }
 
-    public void removeSpecies(String species) {
-        List<Integer> indexes = new ArrayList<>();
-        for (int i = 0; i < this.data.size(); i++) {
-            if (this.data.get(i).getSpecies().equals(species)) {
-                indexes.add(i);
-            }
-        }
-        for (int i = 0; i < indexes.size(); i++) {
-            this.data.remove((int) indexes.get(i));
-        }
+    public boolean removeRabbit(String name) {
+        return this.data.removeIf(r -> r.getName().equals(name));
+    }
 
+    public boolean removeSpecies(String species) {
+        return this.data.removeIf(r -> r.getName().equals(species));
     }
 
     public Rabbit sellRabbit(String name) {
         Rabbit rabbit = null;
-
-        for (int i = 0; i < this.data.size(); i++) {
-            if (this.data.get(i).getName().equals(name)) {
-                this.data.get(i).setAvailable(false);
-                rabbit = this.data.get(i);
-                //за да не презапишем заека -> слагаме брейк.
+        for (Rabbit currRabbit : this.data) {
+            if (currRabbit.getName().equals(name)) {
+                currRabbit.setAvailable(false);
+                rabbit = currRabbit;
                 break;
             }
         }
@@ -64,28 +52,22 @@ public class Cage {
     }
 
     public List<Rabbit> sellRabbitBySpecies(String species) {
-        List<Rabbit> rabbits = new ArrayList<>();
-        for (int i = 0; i < this.data.size(); i++) {
-            if (this.data.get(i).getSpecies().equals(species)) {
-                this.data.get(i).setAvailable(false);
-                rabbits.add(this.data.get(i));
+        List<Rabbit> soldRabbits = new ArrayList<>();
+
+        this.data.forEach(r -> {
+            if (r.getSpecies().equals(species)) {
+                r.setAvailable(false);
+                soldRabbits.add(r);
             }
-        }
-        return rabbits;
+        });
+        return soldRabbits;
     }
 
-    public int count() {
-        return this.data.size();
-    }
 
     public String report() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(String.format("Rabbits available at %s:", this.name)).append(System.lineSeparator());
-        for (Rabbit rabbit : this.data) {
-            if (rabbit.isAvailable()) {
-                sb.append(rabbit.toString()).append(System.lineSeparator());
-            }
-        }
-        return sb.toString().trim();
+        StringBuilder sb = new StringBuilder(String.format("Rabbits available at %s:\n", this.name));
+        this.data.stream().filter(Rabbit::isAvailable).forEach(r -> sb.append(r).append(System.lineSeparator()));
+
+        return sb.toString();
     }
 }

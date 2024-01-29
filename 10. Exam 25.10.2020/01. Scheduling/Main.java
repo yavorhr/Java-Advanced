@@ -4,27 +4,21 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-
         Scanner scanner = new Scanner(System.in);
 
-        ArrayDeque<Integer> tasksStack = new ArrayDeque<>();
-        ArrayDeque<Integer> threadsQueue = new ArrayDeque<>();
+        ArrayDeque<Integer> tasksStack = readDeque(scanner, " ");
+        ArrayDeque<Integer> threadsQueue = readDeque(scanner, ", ");
 
-        Arrays.stream(scanner.nextLine().split(", ")).mapToInt(Integer::parseInt).forEach(tasksStack::push);
-        Arrays.stream(scanner.nextLine().split(" ")).mapToInt(Integer::parseInt).forEach(threadsQueue::offer);
+        int task = Integer.parseInt(scanner.nextLine());
 
-        int valueOfTask = Integer.parseInt(scanner.nextLine());
-
-        boolean killedTask = false;
         while (!tasksStack.isEmpty() && !threadsQueue.isEmpty()) {
-            int firstTask = tasksStack.peekFirst();
-            int firstThread = threadsQueue.peek();
+            int threadValue = threadsQueue.peek();
+            int taskValue = tasksStack.peekFirst();
 
-            if (firstTask == valueOfTask) {
+            if (taskValue == task) {
+                System.out.printf("Thread with value %d killed task %d\n", threadValue, taskValue);
                 break;
-            }
-
-            if (firstThread >= firstTask) {
+            } else if (threadValue >= taskValue) {
                 tasksStack.pop();
                 threadsQueue.poll();
             } else {
@@ -32,11 +26,22 @@ public class Main {
             }
         }
 
-        System.out.println(String.format("Thread with value %d killed task %d",threadsQueue.peek(),tasksStack.peek()));
-        while (!threadsQueue.isEmpty()) {
-            System.out.print(threadsQueue.poll() + " ");
+        printRemainingThreads(threadsQueue);
+    }
+
+    private static void printRemainingThreads(ArrayDeque<Integer> threadsQueue) {
+        threadsQueue.forEach(t -> System.out.print(t + " "));
+    }
+
+    private static ArrayDeque<Integer> readDeque(Scanner scanner, String delimiter) {
+        ArrayDeque<Integer> deque = new ArrayDeque<>();
+
+        if (delimiter.equals(" ")) {
+            Arrays.stream(scanner.nextLine().split(", ")).map(Integer::parseInt).forEach(deque::push);
+            return deque;
+        } else {
+            Arrays.stream(scanner.nextLine().split(" ")).map(Integer::parseInt).forEach(deque::offer);
         }
+        return deque;
     }
 }
-
-

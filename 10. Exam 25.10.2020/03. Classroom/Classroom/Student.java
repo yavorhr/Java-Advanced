@@ -1,16 +1,13 @@
-package classroom;
-
 public class Student {
-    public String firstName;
-    public String lastName;
-    public String bestSubject;
+    private String firstName;
+    private String lastName;
+    private String bestSubject;
 
     public Student(String firstName, String lastName, String bestSubject) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.bestSubject = bestSubject;
     }
-
 
     public String getFirstName() {
         return this.firstName;

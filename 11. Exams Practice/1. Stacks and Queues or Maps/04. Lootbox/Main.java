@@ -3,44 +3,65 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 public class Main {
+    private static int claimedItemsSum = 0;
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        ArrayDeque<Integer> boxQueue = new ArrayDeque<>();
-        ArrayDeque<Integer> boxStack = new ArrayDeque<>();
+        ArrayDeque<Integer> firstBoxQueue = readDeque(scanner, "queue");
+        ArrayDeque<Integer> secondBoxStack = readDeque(scanner, "stack");
 
-        int claimedItems = 0;
-        Arrays.stream(scanner.nextLine().split("\\s+")).mapToInt(Integer::parseInt).forEach(boxQueue::offer);
-        int[] nums = Arrays.stream(scanner.nextLine().split("\\s+")).mapToInt(Integer::parseInt).toArray();
-        for (int i = 0; i < nums.length; i++) {
-            boxStack.push(nums[i]);
+        while (!firstBoxQueue.isEmpty() && !secondBoxStack.isEmpty()) {
+            int firstValue = firstBoxQueue.peekFirst();
+            int secondValue = secondBoxStack.peek();
+
+            manipulateLootBoxes(firstBoxQueue, secondBoxStack, firstValue, secondValue);
         }
 
-        while (!boxStack.isEmpty() && !boxQueue.isEmpty()) {
-            int sum = boxStack.peek() + boxQueue.peek();
-            if (sum % 2 == 0) {
-                claimedItems += sum;
-                boxQueue.pop();
-                boxStack.poll();
-            } else {
-                int number = boxStack.pop();
-                boxQueue.offer(number);
-            }
-        }
+        printResult(firstBoxQueue, secondBoxStack);
 
-        if (boxQueue.isEmpty()) {
-            System.out.println("First lootbox is empty");
+    }
+
+    private static void manipulateLootBoxes(ArrayDeque<Integer> firstBoxQueue, ArrayDeque<Integer> secondBoxStack, int firstValue, int secondValue) {
+        int sum = firstValue + secondValue;
+
+        if (sum % 2 == 0) {
+            firstBoxQueue.poll();
+            secondBoxStack.pop();
+            claimedItemsSum += sum;
         } else {
-            System.out.println("Second lootbox is empty");
-        }
-
-        if (claimedItems >= 100) {
-            System.out.println(String.format("Your loot was epic! Value: %d",claimedItems));
-        } else {
-            System.out.println(String.format("Your loot was poor... Value: %d",claimedItems));
+            secondBoxStack.pop();
+            firstBoxQueue.offer(secondValue);
         }
     }
+
+    private static void printResult(ArrayDeque<Integer> firstBoxQueue, ArrayDeque<Integer> secondBoxStack) {
+        StringBuilder sb = new StringBuilder();
+
+        if (firstBoxQueue.isEmpty()) {
+            sb.append("First lootbox is empty\n");
+        }
+
+        if (secondBoxStack.isEmpty()) {
+            sb.append("Second lootbox is empty\n");
+        }
+
+        if (claimedItemsSum >= 100) {
+            sb.append(String.format("Your loot was epic! Value: %d\n", claimedItemsSum));
+        } else {
+            sb.append(String.format("Your loot was poor... Value: %d\n", claimedItemsSum));
+        }
+
+        System.out.println(sb);
+    }
+
+    public static ArrayDeque<Integer> readDeque(Scanner scanner, String type) {
+        ArrayDeque<Integer> deque = new ArrayDeque<>();
+        if (type.equals("stack")) {
+            Arrays.stream(scanner.nextLine().split(" ")).mapToInt(Integer::parseInt).forEach(deque::push);
+        } else {
+            Arrays.stream(scanner.nextLine().split(" ")).mapToInt(Integer::parseInt).forEach(deque::offer);
+        }
+        return deque;
+    }
 }
-
-
-

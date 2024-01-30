@@ -3,120 +3,93 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 public class Main {
+    private static int dollsCount = 0;
+    private static int trainsCount = 0;
+    private static int teddyBearsCount = 0;
+    private static int bicyclesCount = 0;
+
+    private static final int DOLL_VALUE = 150;
+    private static final int TRAIN_VALUE = 250;
+    private static final int TEDDY_BEAR_VALUE = 300;
+    private static final int BICYCLE_VALUE = 400;
+
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        ArrayDeque<Integer> materialStack = new ArrayDeque<>();
-        ArrayDeque<Integer> magicLevelQueue = new ArrayDeque<>();
+        ArrayDeque<Integer> materialsStack = readDeque(scanner, "stack");
+        ArrayDeque<Integer> magicLevelQueue = readDeque(scanner, "queue");
 
-        Arrays.stream(scanner.nextLine().split("\\s+")).mapToInt(Integer::parseInt).forEach(materialStack::push);
-        Arrays.stream(scanner.nextLine().split("\\s+")).mapToInt(Integer::parseInt).forEach(magicLevelQueue::offer);
+        while (!materialsStack.isEmpty() && !magicLevelQueue.isEmpty()) {
+            int magicValue = magicLevelQueue.peek();
+            int materialValue = materialsStack.peek();
+            int result = magicValue * materialValue;
 
-        int doll = 0;
-        int woodenTrain = 0;
-        int teddyBear = 0;
-        int bicycle = 0;
-
-        while (!materialStack.isEmpty() && !magicLevelQueue.isEmpty()) {
-            int multiplication = materialStack.peek() * magicLevelQueue.peek();
-            switch (multiplication) {
-                case 150:
-                    doll++;
-                    magicLevelQueue.poll();
-                    materialStack.pop();
-                    break;
-                case 250:
-                    woodenTrain++;
-                    magicLevelQueue.poll();
-                    materialStack.pop();
-                    break;
-                case 300:
-                    teddyBear++;
-                    magicLevelQueue.poll();
-                    materialStack.pop();
-                    break;
-                case 400:
-                    bicycle++;
-                    magicLevelQueue.poll();
-                    materialStack.pop();
-                    break;
-                default:
-                    if (multiplication < 0) {
-                        int sum = materialStack.peek() + magicLevelQueue.peek();
-                        magicLevelQueue.poll();
-                        materialStack.pop();
-                        materialStack.push(sum);
-                    } else if (multiplication > 0) {
-                        magicLevelQueue.poll();
-                        int number = materialStack.pop();
-                        materialStack.push(number + 15);
-                    } else {
-                        if (materialStack.peek() == 0) {
-                            materialStack.pop();
-                        }
-                        if (!magicLevelQueue.isEmpty()) {
-                            if (magicLevelQueue.peek() == 0) {
-                                magicLevelQueue.poll();
-                            }
-                        }
-                    }
+            if (craftIsPossible(result)) {
+                craftPresents(result);
+            } else if (zeroInput(magicValue, materialValue)) {
+                zeroInputOperation(materialsStack, magicLevelQueue);
+            } else if (negativeResult(result)) {
+                negativeModification(materialsStack, magicLevelQueue);
+            } else if (positiveResult(result)) {
+                postiveDequeModification(materialsStack, magicLevelQueue);
             }
+
         }
+    }
 
-        boolean craftsAreMade = crafts(teddyBear, bicycle, doll, woodenTrain);
+    private static void postiveDequeModification(ArrayDeque<Integer> stack, ArrayDeque<Integer> queue) {
+        queue.poll();
+        int magicValue = stack.pop();
+        stack.push(magicValue + 15);
+    }
 
-        if (craftsAreMade) {
-            System.out.println("The presents are crafted! Merry Christmas!");
+    private static void negativeModification(ArrayDeque<Integer> stack, ArrayDeque<Integer> queue) {
+
+    }
+
+    private static boolean zeroInput(int magicValue, int materialValue) {
+        return magicValue == 0 || materialValue == 0;
+    }
+
+    private static void zeroInputOperation(ArrayDeque<Integer> stack, ArrayDeque<Integer> queue) {
+        stack.pop();
+        queue.poll();
+    }
+
+
+    private static boolean craftIsPossible(int result) {
+        return result == DOLL_VALUE || result == TRAIN_VALUE || result == TEDDY_BEAR_VALUE || result == BICYCLE_VALUE;
+    }
+
+    private static void craftPresents(int result) {
+        switch (result) {
+            case 150 -> dollsCount++;
+            case 250 -> trainsCount++;
+            case 300 -> teddyBearsCount++;
+            case 400 -> bicyclesCount++;
+        }
+    }
+
+    private static boolean positiveResult(int result) {
+        return result > 0;
+    }
+
+    private static boolean resultIsZero(int result) {
+        return result == 0;
+    }
+
+    private static boolean negativeResult(int result) {
+        return result < 0;
+    }
+
+    public static ArrayDeque<Integer> readDeque(Scanner scanner, String type) {
+        ArrayDeque<Integer> deque = new ArrayDeque<>();
+        if (type.equals("stack")) {
+            Arrays.stream(scanner.nextLine().split(" ")).mapToInt(Integer::parseInt).forEach(deque::push);
         } else {
-            System.out.println("No presents this Christmas!");
+            Arrays.stream(scanner.nextLine().split(" ")).mapToInt(Integer::parseInt).forEach(deque::offer);
         }
-
-
-        if (!materialStack.isEmpty()) {
-            System.out.print("Materials left: ");
-            while (materialStack.size() > 1) {
-                System.out.print(materialStack.poll() + ", ");
-            }
-            System.out.print(materialStack.poll());
-            System.out.println();
-        }
-
-        if (!magicLevelQueue.isEmpty()) {
-            System.out.print("Magic left: ");
-            while (magicLevelQueue.size() > 1) {
-                System.out.print(magicLevelQueue.poll() + ", ");
-            }
-            System.out.print(magicLevelQueue.poll());
-            System.out.println();
-        }
-
-        if (greaterThanOne(bicycle)) {
-            System.out.println(String.format("Bicycle: %d", bicycle));
-        }
-        if (greaterThanOne(doll)) {
-            System.out.println(String.format("Doll: %d", doll));
-        }
-
-        if (greaterThanOne(teddyBear)) {
-            System.out.println(String.format("Teddy bear: %d", teddyBear));
-        }
-
-        if (greaterThanOne(woodenTrain)) {
-            System.out.println(String.format("Wooden train: %d", woodenTrain));
-        }
-    }
-
-    private static boolean greaterThanOne(int num) {
-        if (num > 0) {
-            return true;
-        }
-        return false;
-    }
-
-    private static boolean crafts(int teddyBear, int bike, int doll, int train) {
-        if (teddyBear >= 1 && bike >= 1 || doll >= 1 && train >= 1) {
-            return true;
-        }
-        return false;
+        return deque;
     }
 }

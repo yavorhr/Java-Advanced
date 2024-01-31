@@ -1,86 +1,102 @@
-import java.util.ArrayDeque;
-import java.util.Arrays;
-import java.util.Scanner;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Main {
-    private static int dollsCount = 0;
-    private static int trainsCount = 0;
-    private static int teddyBearsCount = 0;
-    private static int bicyclesCount = 0;
-
     private static final int DOLL_VALUE = 150;
     private static final int TRAIN_VALUE = 250;
     private static final int TEDDY_BEAR_VALUE = 300;
     private static final int BICYCLE_VALUE = 400;
-
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
         ArrayDeque<Integer> materialsStack = readDeque(scanner, "stack");
         ArrayDeque<Integer> magicLevelQueue = readDeque(scanner, "queue");
+        Map<String, Integer> presentsCount = new HashMap<>();
 
         while (!materialsStack.isEmpty() && !magicLevelQueue.isEmpty()) {
             int magicValue = magicLevelQueue.peek();
             int materialValue = materialsStack.peek();
+
             int result = magicValue * materialValue;
 
             if (craftIsPossible(result)) {
-                craftPresents(result);
-            } else if (zeroInput(magicValue, materialValue)) {
-                zeroInputOperation(materialsStack, magicLevelQueue);
-            } else if (negativeResult(result)) {
-                negativeModification(materialsStack, magicLevelQueue);
-            } else if (positiveResult(result)) {
-                postiveDequeModification(materialsStack, magicLevelQueue);
+                craftPresents(result, materialsStack, magicLevelQueue, presentsCount);
+            } else if (equalToZero(magicValue)) {
+                magicLevelQueue.poll();
+            } else if (equalToZero(materialValue)) {
+                materialsStack.pop();
+            } else if (result < 0) {
+                removeBothValues(materialsStack, magicLevelQueue);
+                int sum = magicValue + materialValue;
+                materialsStack.push(sum);
+            } else {
+                removeBothValues(materialsStack, magicLevelQueue);
+                materialsStack.push(materialValue + 15);
             }
-
         }
+
+        printResult(materialsStack, magicLevelQueue, presentsCount);
     }
 
-    private static void postiveDequeModification(ArrayDeque<Integer> stack, ArrayDeque<Integer> queue) {
-        queue.poll();
-        int magicValue = stack.pop();
-        stack.push(magicValue + 15);
+    private static void printResult(ArrayDeque<Integer> stack, ArrayDeque<Integer> queue, Map<String, Integer> map) {
+        StringBuilder sb = new StringBuilder();
+
+        if (pairIsCrafted(map)) {
+            sb.append("The presents are crafted! Merry Christmas!\n");
+        } else {
+            sb.append("No presents this Christmas!\n");
+        }
+
+        if (!stack.isEmpty()) {
+            sb.append(String.format("Materials left: %s\n", getMaterials(stack)));
+        }
+
+        if (!queue.isEmpty()) {
+            sb.append(String.format("Materials left: %s\n", getMaterials(queue)));
+        }
+
+        map.entrySet()
+                .stream()
+                .filter(entry -> entry.getValue() != 0)
+                .sorted(Comparator.comparingInt(Map.Entry::getValue))
+                .forEach(e ->
+                        sb.append(String.format("%s: %d\n", e.getKey(), e.getValue())));
+
+        System.out.println(sb);
     }
 
-    private static void negativeModification(ArrayDeque<Integer> stack, ArrayDeque<Integer> queue) {
-
+    private static String getMaterials(ArrayDeque<Integer> deque) {
+        return deque.stream().map(String::valueOf).collect(Collectors.joining(", "));
     }
 
-    private static boolean zeroInput(int magicValue, int materialValue) {
-        return magicValue == 0 || materialValue == 0;
+    private static boolean pairIsCrafted(Map<String, Integer> map) {
+        return (map.get("Doll") != null && map.get("Train") != null) || (map.get("Teddy bear") != null && map.get("Bicycle") != null);
     }
 
-    private static void zeroInputOperation(ArrayDeque<Integer> stack, ArrayDeque<Integer> queue) {
-        stack.pop();
-        queue.poll();
+    private static boolean equalToZero(int value) {
+        return value == 0;
     }
-
 
     private static boolean craftIsPossible(int result) {
         return result == DOLL_VALUE || result == TRAIN_VALUE || result == TEDDY_BEAR_VALUE || result == BICYCLE_VALUE;
     }
 
-    private static void craftPresents(int result) {
+    private static void craftPresents(int result, ArrayDeque<Integer> stack, ArrayDeque<Integer> queue, Map<String, Integer> map) {
         switch (result) {
-            case 150 -> dollsCount++;
-            case 250 -> trainsCount++;
-            case 300 -> teddyBearsCount++;
-            case 400 -> bicyclesCount++;
+            case DOLL_VALUE -> addToMap("Doll", map);
+            case TRAIN_VALUE -> addToMap("Train", map);
+            case TEDDY_BEAR_VALUE -> addToMap("Teddy bear", map);
+            case BICYCLE_VALUE -> addToMap("Bicycle", map);
         }
+
+        removeBothValues(stack, queue);
     }
 
-    private static boolean positiveResult(int result) {
-        return result > 0;
-    }
-
-    private static boolean resultIsZero(int result) {
-        return result == 0;
-    }
-
-    private static boolean negativeResult(int result) {
-        return result < 0;
+    private static void addToMap(String key, Map<String, Integer> map) {
+        map.putIfAbsent(key, 0);
+        int incrementCount = map.get(key) + 1;
+        map.put(key, incrementCount);
     }
 
     public static ArrayDeque<Integer> readDeque(Scanner scanner, String type) {
@@ -91,5 +107,10 @@ public class Main {
             Arrays.stream(scanner.nextLine().split(" ")).mapToInt(Integer::parseInt).forEach(deque::offer);
         }
         return deque;
+    }
+
+    private static void removeBothValues(ArrayDeque<Integer> stack, ArrayDeque<Integer> queue) {
+        stack.pop();
+        queue.poll();
     }
 }

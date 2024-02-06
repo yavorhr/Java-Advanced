@@ -4,89 +4,81 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        String initialText = scanner.nextLine();
-        StringBuilder textSb = new StringBuilder(initialText);
-
-        int size = Integer.parseInt(scanner.nextLine());
+        StringBuilder sb = new StringBuilder(scanner.nextLine());
         int[] playerPosition = new int[2];
 
-        char[][] field = readMatrix(scanner, size, playerPosition);
+        char[][] matrix = initMatrix(scanner.nextLine());
+        fillMatrix(matrix, scanner, playerPosition);
 
-        String command = scanner.nextLine();
-        while (!"end".equals(command)) {
-            switch (command) {
-                case "up":
-                    movePlayer(playerPosition[0] - 1, playerPosition[1], playerPosition, field, textSb);
-                    break;
-                case "down":
-                    movePlayer(playerPosition[0] + 1, playerPosition[1], playerPosition, field, textSb);
-                    break;
-                case "right":
-                    movePlayer(playerPosition[0], playerPosition[1] + 1, playerPosition, field, textSb);
-                    break;
-                case "left":
-                    movePlayer(playerPosition[0], playerPosition[1] - 1, playerPosition, field, textSb);
-                    break;
+        String input = scanner.nextLine();
+        while (!input.equals("end")) {
+            String direction = input;
+            switch (direction) {
+                case "down" -> movePlayer(playerPosition[0] + 1, playerPosition[1], playerPosition, matrix, sb);
+                case "up" -> movePlayer(playerPosition[0] - 1, playerPosition[1], playerPosition, matrix, sb);
+                case "left" -> movePlayer(playerPosition[0], playerPosition[1] - 1, playerPosition, matrix, sb);
+                case "right" -> movePlayer(playerPosition[0], playerPosition[1] + 1, playerPosition, matrix, sb);
             }
-
-            command = scanner.nextLine();
+            input = scanner.nextLine();
         }
-        System.out.println(textSb.toString());
-        printMatrix(field);
+        printOutput(sb, matrix);
     }
 
-    private static void printMatrix(char[][] field) {
-        for (int row = 0; row < field.length; row++) {
-            for (int col = 0; col < field[row].length; col++) {
-                System.out.print(field[row][col]);
-            }
-            System.out.println();
+    private static void movePlayer(int row, int col, int[] playerPosition, char[][] matrix, StringBuilder string) {
+        if (!isInBounds(row, col, matrix)) {
+            removeLastLetter(string);
+            return;
+        }
+
+        char currentChar = matrix[row][col];
+
+        if (Character.isLetter(currentChar)) {
+            string.append(currentChar);
+        }
+
+        matrix[row][col] = 'P';
+        matrix[playerPosition[0]][playerPosition[1]] = '-';
+        playerPosition[0] = row;
+        playerPosition[1] = col;
+    }
+
+    private static void removeLastLetter(StringBuilder string) {
+        if (!string.isEmpty()) {
+            int lastIndex = string.length() - 1;
+            string.deleteCharAt(lastIndex);
         }
     }
 
-    private static void movePlayer(int newRow, int newCol, int[] position, char[][] field, StringBuilder textSb) {
-        if (outOfBounds(newRow, newCol, field)) {
-            if (!textSb.toString().isEmpty()) {
-                int lastIndex = textSb.toString().length() - 1;
-                textSb.deleteCharAt(lastIndex);
-                return;
-            }
-        }
-
-        if (field[newRow][newCol] != '-') {
-            textSb.append(field[newRow][newCol]);
-        }
-
-        field[position[0]][position[1]] = '-';
-        field[newRow][newCol] = 'P';
-
-        position[0] = newRow;
-        position[1] = newCol;
+    private static void printOutput(StringBuilder sb, char[][] matrix) {
+        System.out.println(sb);
+        printMatrix(matrix);
     }
 
-    private static boolean outOfBounds(int row, int col, char[][] matrix) {
-        return row < 0 || row >= matrix.length || col < 0 || col >= matrix[row].length;
+    private static boolean isInBounds(int row, int col, char[][] matrix) {
+        return row >= 0 && row < matrix.length && col >= 0 && col < matrix[row].length;
     }
 
-    private static char[][] readMatrix(Scanner scanner, int size, int[] playerPosition) {
-        char[][] matrix = new char[size][size];
+    private static char[][] initMatrix(String input) {
+        int size = Integer.parseInt(input);
+        return new char[size][size];
+    }
+
+    private static void fillMatrix(char[][] matrix, Scanner scanner, int[] playerPosition) {
         for (int row = 0; row < matrix.length; row++) {
             String line = scanner.nextLine();
             if (line.contains("P")) {
                 playerPosition[0] = row;
+                playerPosition[1] = line.indexOf('P');
             }
-            for (int col = 0; col < matrix[row].length; col++) {
-                if (line.charAt(col) == 'P') {
-                    playerPosition[1] = col;
-                }
-                matrix[row][col] = line.charAt(col);
-            }
+            matrix[row] = line.replaceAll("\\s+", "").toCharArray();
         }
-        return matrix;
+    }
+    private static void printMatrix(char[][] matrix) {
+        for (int row = 0; row < matrix.length; row++) {
+            for (int col = 0; col < matrix[row].length; col++) {
+                System.out.print(matrix[row][col] + " ");
+            }
+            System.out.println();
+        }
     }
 }
-
-
-
-
-

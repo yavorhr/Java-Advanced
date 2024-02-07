@@ -2,8 +2,6 @@ import java.util.Scanner;
 
 public class Main {
     static boolean reachFinal = false;
-    static int currentRow = -1;
-    static int currentCol = -1;
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -17,13 +15,11 @@ public class Main {
         while (n-- > 0 || !reachFinal) {
             String direction = scanner.nextLine();
 
-
-
             switch (direction) {
-                case "down" -> movePlayer(currentRow + 1, currentCol, playerPosition, matrix, "down");
-                case "up" -> movePlayer(currentRow - 1, currentCol, playerPosition, matrix, "up");
-                case "left" -> movePlayer(currentRow, currentCol - 1, playerPosition, matrix, "left");
-                case "right" -> movePlayer(currentRow, currentCol + 1, playerPosition, matrix, "right");
+                case "down" -> movePlayer(playerPosition[0] + 1, playerPosition[1], playerPosition, matrix, "down");
+                case "up" -> movePlayer(playerPosition[0] - 1, playerPosition[1], playerPosition, matrix, "up");
+                case "left" -> movePlayer(playerPosition[0], playerPosition[1] - 1, playerPosition, matrix, "left");
+                case "right" -> movePlayer(playerPosition[0], playerPosition[1] + 1, playerPosition, matrix, "right");
             }
         }
     }
@@ -31,13 +27,10 @@ public class Main {
     private static void movePlayer(int row, int col, int[] playerPosition, char[][] matrix, String direction) {
         char currentChar = matrix[row][col];
 
-        if (!isInBounds(row, col, matrix)) {
-        }
-
         if (currentChar == 'F') {
             reachFinal = true;
         } else if (currentChar == 'B') {
-            playerSteppedOnBonus();
+            movePlayer(row, col, playerPosition, matrix, direction);
         } else if (currentChar == 'T') {
             playerSteppedOnTrap();
         }
@@ -48,19 +41,12 @@ public class Main {
 
     }
 
-    private static char movePlayerAtTheOtherSideOfTheMatrix(char[][] matrix, int[] playerPosition, String direction) {
-        int currentRow = playerPosition[0];
-        int currentCol = playerPosition[1];
-
+    private static void movePlayerOnTheOtherSide(int row, int col, int[] playerPosition, char[][] matrix, String direction) {
         switch (direction) {
-            case "down" -> {
-                playerPosition[0] = matrix[0][currentCol];
-                matrix[0][currentCol] = 'f';
-                matrix[currentRow][currentCol] = ' ';
-            }
-            case "up" ->
-            case "left" ->
-            case "right" ->
+            case "down" -> movePlayer(row + 1, col, playerPosition, matrix, direction);
+            case "up" -> movePlayer(row - 1, col, playerPosition, matrix, direction);
+            case "left" -> movePlayer(row, col - 1, playerPosition, matrix, direction);
+            case "right" -> movePlayer(row, col + 1, playerPosition, matrix, direction);
         }
     }
 
@@ -82,12 +68,44 @@ public class Main {
                 playerPosition[0] = row;
                 playerPosition[1] = line.indexOf('f');
 
-                currentRow = row;
-                currentCol = line.indexOf('f');
+
             }
             matrix[row] = line.replaceAll("\\s+", "").toCharArray();
         }
         return matrix;
+    }
+
+    private static int moveUp(char[][] matrix, int row) {
+        row--;
+        if (row < 0) {
+            row = matrix.length - 1;
+        }
+        return row;
+    }
+
+    private static int moveDown(char[][] matrix, int row) {
+        row++;
+        if (row > matrix.length - 1) {
+            row = 0;
+        }
+        return row;
+    }
+
+    private static int moveRight(char[][] matrix, int col) {
+        col++;
+        if (col > matrix[col].length) {
+            col = 0;
+        }
+        return col;
+    }
+
+
+    private static int moveLeft(char[][] matrix, int col) {
+        col--;
+        if (col < 0) {
+            col = matrix[col].length - 1;
+        }
+        return col;
     }
 
     private static void printMatrix(char[][] matrix) {

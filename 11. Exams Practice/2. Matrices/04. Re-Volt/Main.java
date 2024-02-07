@@ -1,114 +1,101 @@
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) {
+    static boolean reachFinal = false;
+    static int currentRow = -1;
+    static int currentCol = -1;
 
+    public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
+        int size = Integer.parseInt(scanner.nextLine());
         int n = Integer.parseInt(scanner.nextLine());
-        int commandsCnt = Integer.parseInt(scanner.nextLine());
 
-        int xPos = -1;
-        int yPos = -1;
-        char[][] matrix = new char[n][n];
+        int[] playerPosition = new int[2];
+        char[][] matrix = fillMatrix(scanner, playerPosition, size);
+
+        while (n-- > 0 || !reachFinal) {
+            String direction = scanner.nextLine();
+
+
+
+            switch (direction) {
+                case "down" -> movePlayer(currentRow + 1, currentCol, playerPosition, matrix, "down");
+                case "up" -> movePlayer(currentRow - 1, currentCol, playerPosition, matrix, "up");
+                case "left" -> movePlayer(currentRow, currentCol - 1, playerPosition, matrix, "left");
+                case "right" -> movePlayer(currentRow, currentCol + 1, playerPosition, matrix, "right");
+            }
+        }
+    }
+
+    private static void movePlayer(int row, int col, int[] playerPosition, char[][] matrix, String direction) {
+        char currentChar = matrix[row][col];
+
+        if (!isInBounds(row, col, matrix)) {
+        }
+
+        if (currentChar == 'F') {
+            reachFinal = true;
+        } else if (currentChar == 'B') {
+            playerSteppedOnBonus();
+        } else if (currentChar == 'T') {
+            playerSteppedOnTrap();
+        }
+        matrix[row][col] = 'f';
+        matrix[playerPosition[0]][playerPosition[1]] = '-';
+        playerPosition[0] = row;
+        playerPosition[1] = col;
+
+    }
+
+    private static char movePlayerAtTheOtherSideOfTheMatrix(char[][] matrix, int[] playerPosition, String direction) {
+        int currentRow = playerPosition[0];
+        int currentCol = playerPosition[1];
+
+        switch (direction) {
+            case "down" -> {
+                playerPosition[0] = matrix[0][currentCol];
+                matrix[0][currentCol] = 'f';
+                matrix[currentRow][currentCol] = ' ';
+            }
+            case "up" ->
+            case "left" ->
+            case "right" ->
+        }
+    }
+
+    private static boolean isInBounds(int row, int col, char[][] matrix) {
+        return row >= 0 && row < matrix.length && col >= 0 && col < matrix[row].length;
+    }
+
+    private static char[][] initMatrix(String input) {
+        int size = Integer.parseInt(input);
+        return new char[size][size];
+    }
+
+    private static char[][] fillMatrix(Scanner scanner, int[] playerPosition, int size) {
+        char[][] matrix = new char[size][size];
+
+        for (int row = 0; row < size; row++) {
+            String line = scanner.nextLine();
+            if (line.contains("f")) {
+                playerPosition[0] = row;
+                playerPosition[1] = line.indexOf('f');
+
+                currentRow = row;
+                currentCol = line.indexOf('f');
+            }
+            matrix[row] = line.replaceAll("\\s+", "").toCharArray();
+        }
+        return matrix;
+    }
+
+    private static void printMatrix(char[][] matrix) {
         for (int row = 0; row < matrix.length; row++) {
-            String input = (scanner.nextLine());
             for (int col = 0; col < matrix[row].length; col++) {
-                matrix[row][col] = input.charAt(col);
-                if (input.charAt(col) == 'f') {
-                    xPos = row;
-                    yPos = col;
-                    matrix[xPos][yPos] = '-';
-                }
-            }
-        }
-        boolean playerWon = false;
-        while (commandsCnt-- > 0) {
-            String command = (scanner.nextLine());
-            if (matrix[xPos][yPos] == '-') {
-                if (command.equals("left")) {
-                    yPos = moveLeft(n, yPos);
-                } else if (command.equals("right")) {
-                    yPos = moveRight(n, yPos);
-                } else if (command.equals("up")) {
-                    xPos = moveUp(n, xPos);
-                } else if (command.equals("down")) {
-                    xPos = moveDown(n, xPos);
-                }
-            }
-            if (matrix[xPos][yPos] == 'B') {
-                if (command.equals("left")) {
-                    yPos = moveLeft(n, yPos);
-                } else if (command.equals("right")) {
-                    yPos = moveRight(n, yPos);
-                } else if (command.equals("up")) {
-                    xPos = moveUp(n, xPos);
-                } else if (command.equals("down")) {
-                    xPos = moveDown(n, xPos);
-                }
-            } else if (matrix[xPos][yPos] == 'T') {
-                if (command.equals("left")) {
-                    yPos = moveRight(n, yPos);
-                } else if (command.equals("right")) {
-                    yPos = moveLeft(n, yPos);
-                } else if (command.equals("up")) {
-                    xPos = moveDown(n, xPos);
-                } else if (command.equals("down")) {
-                    xPos = moveUp(n, xPos);
-                }
-            } else if (matrix[xPos][yPos] == 'F') {
-                playerWon = true;
-                break;
-            }
-        }
-        matrix[xPos][yPos] = 'f';
-        if (playerWon) {
-            System.out.println("Player won!");
-        } else {
-            System.out.println("Player lost!");
-        }
-        for (char[] chars : matrix) {
-            for (char aChar : chars) {
-                System.out.print(aChar);
+                System.out.print(matrix[row][col] + " ");
             }
             System.out.println();
         }
-
-    }
-
-    private static int moveUp(int n, int xPos) {
-        xPos--;
-        if (xPos < 0) {
-            xPos = n - 1;
-        }
-        return xPos;
-    }
-
-    private static int moveDown(int n, int xPos) {
-        xPos++;
-        if (xPos >= n) {
-            xPos = 0;
-        }
-        return xPos;
-    }
-
-    private static int moveLeft(int n, int yPos) {
-        yPos--;
-        if (yPos < 0) {
-            yPos = n - 1;
-        }
-        return yPos;
-    }
-
-
-    private static int moveRight(int n, int yPos) {
-        yPos++;
-        if (yPos >= n) {
-            yPos = 0;
-        }
-        return yPos;
     }
 }
-
-
-
